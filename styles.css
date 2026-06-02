@@ -3083,3 +3083,275 @@ body {
     flex-direction: column;
   }
 }
+
+/* ==========================================
+   ELEGANT VISUAL REFINEMENT PASS
+   ========================================== */
+
+:root {
+  --bg-stadium: #070a12;
+  --bg-card: rgba(13, 18, 30, 0.74);
+  --bg-card-hover: rgba(18, 26, 42, 0.88);
+  --text-gray: #b2bac8;
+  --border-glass: rgba(255, 255, 255, 0.11);
+  --border-neon: rgba(255, 174, 43, 0.22);
+  --shadow-neon: 0 10px 34px rgba(255, 153, 0, 0.18);
+  --shadow-gold: 0 10px 34px rgba(255, 193, 7, 0.16);
+  --shadow-blue: 0 10px 34px rgba(255, 229, 0, 0.14);
+}
+
+body {
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0)),
+    radial-gradient(circle at 18% 10%, rgba(255, 153, 0, 0.075) 0%, transparent 34%),
+    radial-gradient(circle at 82% 12%, rgba(216, 0, 39, 0.055) 0%, transparent 30%),
+    radial-gradient(circle at 50% 92%, rgba(255, 229, 0, 0.045) 0%, transparent 42%);
+  color: rgba(255, 255, 255, 0.94);
+  text-rendering: optimizeLegibility;
+}
+
+section {
+  padding-top: 112px;
+}
+
+.section-title {
+  margin-bottom: 42px;
+}
+
+.section-title h2,
+.subpage-header-content h2,
+.hero-content h1 {
+  letter-spacing: 0;
+  text-shadow: 0 14px 38px rgba(0, 0, 0, 0.42);
+}
+
+.section-title h2 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+}
+
+.section-title p,
+.subpage-header-content p,
+.hero-content p,
+.footer-col p,
+.reward-details p,
+.flow-step p,
+.game-card p {
+  color: var(--text-gray);
+}
+
+.navbar {
+  background: rgba(7, 10, 18, 0.78);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.navbar.scrolled {
+  background: rgba(7, 10, 18, 0.94);
+  box-shadow: 0 16px 46px rgba(0, 0, 0, 0.34);
+}
+
+.logo {
+  letter-spacing: 0;
+}
+
+.logo img {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+}
+
+.btn {
+  border-radius: 8px;
+  font-weight: 800;
+  letter-spacing: 0.18px;
+  box-shadow: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ffad2b, #ffe66c);
+  box-shadow: 0 14px 32px rgba(255, 153, 0, 0.22);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 174, 43, 0.42);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, #d80027, #ff5b76);
+  box-shadow: 0 14px 32px rgba(216, 0, 39, 0.22);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.glass-card,
+.flow-step,
+.country-card,
+.theme-card,
+.gallery-item,
+.faq-item,
+.scoreboard-table-wrap,
+.leaderboard-tabs,
+.countdown-container,
+.dash-card,
+.app-lock-card,
+.scoreboard-ui,
+.game-modal-content {
+  background: linear-gradient(145deg, rgba(16, 22, 36, 0.78), rgba(9, 13, 23, 0.72));
+  border: 1px solid rgba(255, 255, 255, 0.105);
+  border-radius: 8px;
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.glass-card:hover,
+.flow-step:hover,
+.country-card:hover,
+.theme-card:hover,
+.gallery-item:hover,
+.faq-item:hover,
+.dash-card:hover {
+  background: linear-gradient(145deg, rgba(22, 30, 48, 0.84), rgba(11, 16, 27, 0.78));
+  border-color: rgba(255, 174, 43, 0.28);
+  box-shadow:
+    0 24px 58px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(255, 174, 43, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.hero::before,
+.subpage-header::before {
+  background:
+    linear-gradient(180deg, rgba(7, 10, 18, 0.18) 0%, rgba(7, 10, 18, 0.72) 72%, var(--bg-stadium) 100%),
+    radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.34) 78%);
+}
+
+.hero-parallax-bg {
+  filter: saturate(0.92) contrast(1.04);
+}
+
+.hero-content {
+  padding-inline: 18px;
+}
+
+.badge-tag {
+  background: rgba(255, 174, 43, 0.115);
+  border-color: rgba(255, 174, 43, 0.32);
+  border-radius: 8px;
+  box-shadow: none;
+  animation: none;
+}
+
+.countdown-container {
+  gap: 10px;
+}
+
+.countdown-num,
+.score-col,
+.scoreboard-col-val {
+  text-shadow: none;
+}
+
+.flow-step,
+.country-card,
+.theme-card,
+.dash-card {
+  transform-style: flat;
+}
+
+.step-icon,
+.reward-icon,
+.success-badge,
+.lock-icon-glow {
+  box-shadow: none;
+}
+
+.form-group input,
+.form-group select,
+input[type="file"] {
+  background: rgba(5, 8, 15, 0.58);
+  border-color: rgba(255, 255, 255, 0.13);
+  border-radius: 8px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: rgba(255, 174, 43, 0.74);
+  box-shadow: 0 0 0 3px rgba(255, 174, 43, 0.13);
+}
+
+.support-btn,
+.filter-btn,
+.leaderboard-tab-btn {
+  border-radius: 8px;
+}
+
+.country-card.selected,
+.theme-card.selected,
+.leaderboard-tab-btn.active,
+.filter-btn.active {
+  box-shadow: 0 12px 28px rgba(255, 174, 43, 0.16);
+}
+
+.game-thumb-wrap,
+.canvas-preview-frame,
+.gallery-img-wrap,
+.webcam-stream-wrap,
+.rewards-trophy-img {
+  border-radius: 8px;
+}
+
+.scoreboard-table th {
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.scoreboard-table td {
+  color: rgba(255, 255, 255, 0.91);
+}
+
+.scoreboard-table tr:hover td {
+  background: rgba(255, 174, 43, 0.045);
+}
+
+.mobile-bottom-nav {
+  background: rgba(7, 10, 18, 0.94);
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+.bottom-nav-tab.active {
+  color: #ffad2b;
+}
+
+.footer {
+  background:
+    linear-gradient(180deg, rgba(7, 10, 18, 0), rgba(4, 6, 13, 0.9) 22%),
+    #04060d;
+}
+
+@media (max-width: 768px) {
+  section {
+    padding-top: 72px;
+  }
+
+  .glass-card,
+  .flow-step,
+  .country-card,
+  .theme-card,
+  .gallery-item,
+  .faq-item,
+  .scoreboard-table-wrap,
+  .leaderboard-tabs,
+  .countdown-container,
+  .dash-card,
+  .game-modal-content {
+    border-radius: 8px;
+  }
+
+  .hero-content h1,
+  .subpage-header-content h2,
+  .section-title h2 {
+    letter-spacing: 0;
+  }
+}

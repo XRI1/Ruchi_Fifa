@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arcade Games Arena - Ruchi Football 2026</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- ==========================================
+       NAVIGATION BAR
+       ========================================== -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+      <img src="assets/images/ruchi_logo.jpg" alt="Ruchi Logo" style="height: 36px; width: auto; border-radius: 4px;">
+      <span>RUCCHI<span>2026</span></span>
+    </a>
+
+
+    <div class="nav-cta">
+      <a href="registration.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">Register
+        Now</a>
+    </div>
+  </nav>
+
+  <!-- ==========================================
+       GAMES SECTION HEADER
+       ========================================== -->
+  <section class="subpage-header">
+    <div class="hero-parallax-bg" style="background-image: url('assets/images/stadium_hero.png');"></div>
+    <div class="subpage-header-content">
+      <h2>Event Arcade</h2>
+      <p>Challenge yourself in high-octane mini-game, rack up points, and support your nation's rank.</p>
+    </div>
+  </section>
+
+  <section id="games" class="games-section reveal-item" style="padding-top: 50px;">
+    <div class="back-nav-wrap" style="max-width: 580px; margin: 0 auto 25px auto; width: 100%; text-align: left;">
+      <a href="registration.html" class="btn btn-secondary"
+        style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; font-size: 0.85rem; border-radius: 30px;">
+        <span>←</span> Back to Dashboard
+      </a>
+    </div>
+    <div style="display: flex; justify-content: center; max-width: 580px; margin: 0 auto; width: 100%;">
+      <!-- Game Card 1 -->
+      <div class="glass-card game-card reveal-item" style="width: 100%;">
+        <div class="game-thumb-wrap">
+          <span class="game-badge">Action</span>
+          <img src="assets/images/penalty_shootout.png" alt="Penalty Shootout Challenge" class="game-thumb">
+        </div>
+        <h3>Penalty Shootout Challenge <span class="game-score-badge" id="personal-best-penalty">PB: 0</span></h3>
+        <p>Step up to the penalty spot! Take on the goalkeeper, target the corners of the goal net, and fire shots past
+          the defender within the 30-second time limit.</p>
+
+        <ul class="game-rules-list">
+          <li>Time Limit: 30 seconds</li>
+          <li>Each goal scores 100 points</li>
+          <li>Top corner goals score 150 points (Bonus!)</li>
+          <li>Goalkeeper saves block your streak</li>
+        </ul>
+
+        <button onclick="launchGame('penalty')" class="btn btn-primary" id="play-btn-penalty" style="width: 100%;">Play
+          Penalty Challenge ⚽</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       GAMEPLAY MODAL CONTAINER
+       ========================================== -->
+  <div class="game-modal" id="game-modal">
+    <div class="game-modal-content">
+      <div class="game-modal-header">
+        <h3 id="game-title">Penalty Shootout Challenge</h3>
+        <button class="game-modal-close" onclick="closeGameModal()">&times;</button>
+      </div>
+
+      <div class="game-canvas-container">
+        <!-- Live HUD Overlay -->
+        <div class="game-hud">
+          <div class="hud-item">Score: <span id="hud-score">0000</span></div>
+          <div class="hud-item" id="hud-timer-wrap">Time: <span id="hud-timer">30</span>s</div>
+        </div>
+
+        <!-- Game Start Overlay -->
+        <div class="game-start-overlay" id="game-start-overlay">
+          <h4 id="start-overlay-title">Ready to Shoot?</h4>
+          <p id="start-overlay-desc">Use your mouse/touch to aim and click on the goal openings. Beat the goalkeeper
+            before time runs out!</p>
+          <button class="btn btn-primary" onclick="startGameLoop()">Kick Off 🚀</button>
+        </div>
+
+        <!-- Scoreboard / Game Result Overlay -->
+        <div class="game-result-overlay" id="game-result-overlay">
+          <div class="scoreboard-ui">
+            <h4 class="scoreboard-title" id="result-title">Game Finished!</h4>
+
+            <div class="scoreboard-score-grid">
+              <div class="scoreboard-col">
+                <span class="scoreboard-col-label">Your Score</span>
+                <span class="scoreboard-col-val neon-green" id="result-user-score">0</span>
+              </div>
+              <div class="scoreboard-col">
+                <span class="scoreboard-col-label">Country Boost</span>
+                <span class="scoreboard-col-val neon-blue" id="result-country-boost">+0</span>
+              </div>
+            </div>
+
+            <div class="scoreboard-ranking" id="result-leaderboard-notice" style="margin-bottom: 15px;">
+              You ranked #12 on today's board!
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button class="btn btn-secondary" onclick="restartGame()">Play Again 🔄</button>
+            <a href="leaderboard.html" class="btn btn-primary">Standings 📊</a>
+            <a href="photobooth.html" class="btn btn-accent">AI Photo Booth 📸</a>
+          </div>
+        </div>
+
+        <!-- Canvas Element -->
+        <canvas id="game-canvas" width="800" height="450"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+          <img src="assets/images/ruchi_logo.jpg" alt="Ruchi Logo"
+            style="height: 42px; width: auto; border-radius: 4px;">
+          <span>RUCCHI<span>2026</span></span>
+        </a>
+        <p>Bringing fans closer to the action of the FIFA World Cup 2026. Register, compete, play, and win with Ruchi
+          Football Fever.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon">F</a>
+          <a href="#" class="social-icon">X</a>
+          <a href="#" class="social-icon">I</a>
+          <a href="#" class="social-icon">Y</a>
+        </div>
+      </div>
+
+
+      <div class="footer-col">
+        <h4>Contact Information</h4>
+        <p>Email: event2026@rucchi-football.com<br>Phone: +880 9612-RUCCHI<br>Address: Level 8, Sports Tower, Dhaka</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ruchi Football Campaign. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+  <script src="games.js"></script>
+</body>
+
+</html>

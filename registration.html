@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player Registration - Ruchi Football 2026</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- ==========================================
+       NAVIGATION BAR
+       ========================================== -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+      <img src="assets/images/ruchi_logo.jpg" alt="Ruchi Logo" style="height: 36px; width: auto; border-radius: 4px;">
+      <span>RUCCHI<span>2026</span></span>
+    </a>
+
+
+    <div class="nav-cta">
+      <a href="registration.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">Register
+        Now</a>
+    </div>
+  </nav>
+
+  <!-- ==========================================
+       REGISTRATION SECTION HEADER
+       ========================================== -->
+  <section class="subpage-header">
+    <div class="hero-parallax-bg" style="background-image: url('assets/images/stadium_hero.png');"></div>
+    <div class="subpage-header-content">
+      <h2>Register & Play</h2>
+      <p>Unlock access to the games, choose your country, and record your high scores.</p>
+    </div>
+  </section>
+
+  <section id="registration" class="registration-section reveal-item" style="padding-top: 50px;">
+    <div class="registration-container">
+      <div class="glass-card reg-form-wrap reveal-item" id="registration-card">
+        <form id="reg-form" onsubmit="handleRegistration(event)">
+          <div class="reg-grid">
+            <div class="form-group">
+              <label for="reg-name">Full Name</label>
+              <input type="text" id="reg-name" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-phone">Phone Number</label>
+              <input type="tel" id="reg-phone" placeholder="Enter your phone number" required>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-email">Email Address</label>
+              <input type="email" id="reg-email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-location">Area / Location</label>
+              <input type="text" id="reg-location" placeholder="e.g. Dhaka, Bangladesh" required>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="reg-jersey">Choose Your Jersey Number</label>
+              <input type="number" id="reg-jersey" min="1" max="99"
+                placeholder="Enter your favorite jersey number (1-99)" required>
+            </div>
+          </div>
+
+          <!-- Dedicated Country Selection UI -->
+          <div class="country-selection-ui">
+            <label style="font-weight: 700; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px;">Choose
+              your team</label>
+            <p style="color: var(--text-gray); font-size: 0.85rem; margin-top: 5px;">Every point you earn will support
+              this country in the standings.</p>
+
+            <div class="country-grid" id="country-grid">
+              <div class="country-card" data-country="Argentina" onclick="selectCountry(this)">
+                <span class="checkmark">✓</span>
+                <img src="https://flagcdn.com/w80/ar.png" alt="Argentina" class="flag-img">
+                <span class="country-name">Argentina</span>
+                <button type="button" class="support-btn">Support</button>
+              </div>
+
+              <div class="country-card" data-country="Brazil" onclick="selectCountry(this)">
+                <span class="checkmark">✓</span>
+                <img src="https://flagcdn.com/w80/br.png" alt="Brazil" class="flag-img">
+                <span class="country-name">Brazil</span>
+                <button type="button" class="support-btn">Support</button>
+              </div>
+
+              <div class="country-card" data-country="Germany" onclick="selectCountry(this)">
+                <span class="checkmark">✓</span>
+                <img src="https://flagcdn.com/w80/de.png" alt="Germany" class="flag-img">
+                <span class="country-name">Germany</span>
+                <button type="button" class="support-btn">Support</button>
+              </div>
+
+              <div class="country-card" data-country="France" onclick="selectCountry(this)">
+                <span class="checkmark">✓</span>
+                <img src="https://flagcdn.com/w80/fr.png" alt="France" class="flag-img">
+                <span class="country-name">France</span>
+                <button type="button" class="support-btn">Support</button>
+              </div>
+
+              <div class="country-card" data-country="England" onclick="selectCountry(this)">
+                <span class="checkmark">✓</span>
+                <img src="https://flagcdn.com/w80/gb-eng.png" alt="England" class="flag-img">
+                <span class="country-name">England</span>
+                <button type="button" class="support-btn">Support</button>
+              </div>
+
+              <div class="country-card" data-country="Spain" onclick="selectCountry(this)">
+                <span class="checkmark">✓</span>
+                <img src="https://flagcdn.com/w80/es.png" alt="Spain" class="flag-img">
+                <span class="country-name">Spain</span>
+                <button type="button" class="support-btn">Support</button>
+              </div>
+
+              <div class="country-card" data-country="Japan" onclick="selectCountry(this)">
+                <span class="checkmark">✓</span>
+                <img src="https://flagcdn.com/w80/jp.png" alt="Japan" class="flag-img">
+                <span class="country-name">Japan</span>
+                <button type="button" class="support-btn">Support</button>
+              </div>
+
+              <div class="country-card" data-country="USA" onclick="selectCountry(this)">
+                <span class="checkmark">✓</span>
+                <img src="https://flagcdn.com/w80/us.png" alt="USA" class="flag-img">
+                <span class="country-name">USA</span>
+                <button type="button" class="support-btn">Support</button>
+              </div>
+            </div>
+            <input type="hidden" id="selected-country-val" required>
+          </div>
+
+          <div class="terms-wrap" style="margin-top: 30px;">
+            <input type="checkbox" id="reg-terms" required>
+            <label for="reg-terms">I accept the terms and conditions of Ruchi Football Fever 2026 campaign.</label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Complete Registration & Play</button>
+        </form>
+      </div>
+
+      <!-- Success Board (Dashboard Grid) -->
+      <div class="reg-success-card" id="registration-success" style="display: none; width: 100%;">
+        <!-- Welcome Bar -->
+        <div class="dashboard-header glass-card"
+          style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 30px; gap: 20px;">
+          <div class="dashboard-user-info" style="display: flex; align-items: center; gap: 15px;">
+            <span class="user-avatar-badge"
+              style="background: rgba(255, 153, 0, 0.1); border: 1px solid rgba(255,153,0,0.3); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">👤</span>
+            <div class="user-info-text" style="text-align: left;">
+              <h3 id="player-card-name"
+                style="font-family: var(--font-primary); font-size: 1.25rem; font-weight: 700; color: #fff;">Cristiano
+                Ronaldo</h3>
+              <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 2px;"><span id="player-card-team">🇧🇷
+                  Brazil</span> | Jersey <span id="player-card-jersey">#10</span></p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Dashboard Menu Grid -->
+        <div class="dashboard-grid">
+          <!-- Card 1: Games -->
+          <a href="games.html" class="dash-card card-games">
+            <div class="dash-card-icon">
+              <svg viewBox="0 0 100 100"
+                style="width: 50px; height: 50px; fill: none; stroke: currentColor; stroke-width: 6;">
+                <rect x="15" y="28" width="70" height="44" rx="14" />
+                <line x1="28" y1="50" x2="42" y2="50" stroke-width="5" stroke-linecap="round" />
+                <line x1="35" y1="43" x2="35" y2="57" stroke-width="5" stroke-linecap="round" />
+                <circle cx="62" cy="50" r="4.5" fill="currentColor" stroke="none" />
+                <circle cx="72" cy="50" r="4.5" fill="currentColor" stroke="none" />
+              </svg>
+            </div>
+            <div class="dash-card-title">Games</div>
+          </a>
+
+          <!-- Card 2: Power Photobooth -->
+          <a href="photobooth.html" class="dash-card card-photobooth">
+            <div class="dash-card-icon">
+              <svg viewBox="0 0 100 100"
+                style="width: 50px; height: 50px; fill: none; stroke: currentColor; stroke-width: 6;">
+                <rect x="16" y="30" width="68" height="46" rx="8" />
+                <circle cx="50" cy="53" r="13" stroke-width="6" />
+                <circle cx="70" cy="41" r="3" fill="currentColor" stroke="none" />
+                <path d="M 38,30 L 42,20 L 58,20 L 62,30 Z" fill="currentColor" stroke="none" />
+              </svg>
+            </div>
+            <div class="dash-card-title">Rucchi Photobooth</div>
+          </a>
+
+          <!-- Card 3: AI Gallery -->
+          <a href="photobooth.html#gallery" class="dash-card card-gallery">
+            <div class="dash-card-icon">
+              <svg viewBox="0 0 100 100"
+                style="width: 50px; height: 50px; fill: none; stroke: currentColor; stroke-width: 6;">
+                <rect x="22" y="22" width="60" height="60" rx="8" />
+                <rect x="16" y="28" width="60" height="60" rx="8" />
+                <circle cx="32" cy="44" r="4" fill="currentColor" stroke="none" />
+                <path d="M 22,76 L 38,54 L 48,68 L 58,50 L 70,76 Z" stroke-width="4" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="dash-card-title">Rucchi Gallery</div>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+          <img src="assets/images/ruchi_logo.jpg" alt="Ruchi Logo"
+            style="height: 42px; width: auto; border-radius: 4px;">
+          <span>RUCCHI<span>2026</span></span>
+        </a>
+        <p>Bringing fans closer to the action of the FIFA World Cup 2026. Register, compete, play, and win with Ruchi
+          Football Fever.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon">F</a>
+          <a href="#" class="social-icon">X</a>
+          <a href="#" class="social-icon">I</a>
+          <a href="#" class="social-icon">Y</a>
+        </div>
+      </div>
+
+
+      <div class="footer-col">
+        <h4>Contact Information</h4>
+        <p>Email: event2026@rucchi-football.com<br>Phone: +880 9612-RUCCHI<br>Address: Level 8, Sports Tower, Dhaka</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ruchi Football Campaign. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+
+</html>

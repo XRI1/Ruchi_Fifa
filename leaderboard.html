@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Standing Leaderboards - Ruchi Football 2026</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==========================================
+       NAVIGATION BAR
+       ========================================== -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+      <img src="assets/images/ruchi_logo.jpg" alt="Ruchi Logo" style="height: 36px; width: auto; border-radius: 4px;">
+      <span>RUCCHI<span>2026</span></span>
+    </a>
+
+    
+    <div class="nav-cta">
+      <a href="registration.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">Register Now</a>
+    </div>
+  </nav>
+
+  <!-- ==========================================
+       LEADERBOARD SECTION HEADER
+       ========================================== -->
+  <section class="subpage-header">
+    <div class="hero-parallax-bg" style="background-image: url('assets/images/stadium_hero.png');"></div>
+    <div class="subpage-header-content">
+      <h2>Live Scoreboards</h2>
+      <p>Watch individuals clash for top scorer glory, and see which nation leads the global charts.</p>
+    </div>
+  </section>
+
+  <section id="leaderboard" class="leaderboard-section reveal-item" style="padding-top: 50px;">
+    <div class="leaderboard-container reveal-item">
+      <div class="leaderboard-tabs">
+        <button class="leaderboard-tab-btn active" onclick="switchLeaderboard('individual')">Top 15 Scorers</button>
+        <button class="leaderboard-tab-btn" onclick="switchLeaderboard('country')">Top Countries</button>
+      </div>
+      
+      <div class="leaderboard-panels">
+        <!-- Panel 1: Individual -->
+        <div class="leaderboard-panel active" id="panel-individual">
+          <div class="scoreboard-table-wrap">
+            <table class="scoreboard-table">
+              <thead>
+                <tr>
+                  <th style="width: 10%;">Rank</th>
+                  <th style="width: 50%;">Player</th>
+                  <th style="width: 20%;">Supporting Team</th>
+                  <th style="width: 20%; text-align: right;">Total Score</th>
+                </tr>
+              </thead>
+              <tbody id="individual-leaderboard-body">
+                <!-- Dynamically populated via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Panel 2: Country -->
+        <div class="leaderboard-panel" id="panel-country">
+          <div class="scoreboard-table-wrap">
+            <table class="scoreboard-table">
+              <thead>
+                <tr>
+                  <th style="width: 10%;">Rank</th>
+                  <th style="width: 30%;">Country</th>
+                  <th style="width: 40%; text-align: center;">Combined Score & Progress</th>
+                  <th style="width: 20%; text-align: right;">Supporters</th>
+                </tr>
+              </thead>
+              <tbody id="country-leaderboard-body">
+                <!-- Dynamically populated via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+          <img src="assets/images/ruchi_logo.jpg" alt="Ruchi Logo" style="height: 42px; width: auto; border-radius: 4px;">
+          <span>RUCCHI<span>2026</span></span>
+        </a>
+        <p>Bringing fans closer to the action of the FIFA World Cup 2026. Register, compete, play, and win with Ruchi Football Fever.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon">F</a>
+          <a href="#" class="social-icon">X</a>
+          <a href="#" class="social-icon">I</a>
+          <a href="#" class="social-icon">Y</a>
+        </div>
+      </div>
+
+      
+      <div class="footer-col">
+        <h4>Contact Information</h4>
+        <p>Email: event2026@rucchi-football.com<br>Phone: +880 9612-RUCCHI<br>Address: Level 8, Sports Tower, Dhaka</p>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ruchi Football Campaign. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>

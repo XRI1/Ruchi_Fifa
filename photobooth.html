@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Fan Photo Booth - Ruchi Football 2026</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==========================================
+       NAVIGATION BAR
+       ========================================== -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+      <img src="assets/images/ruchi_logo.jpg" alt="Ruchi Logo" style="height: 36px; width: auto; border-radius: 4px;">
+      <span>RUCCHI<span>2026</span></span>
+    </a>
+
+    
+    <div class="nav-cta">
+      <a href="registration.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">Register Now</a>
+    </div>
+  </nav>
+
+  <!-- ==========================================
+       AI PHOTO BOOTH HEADER
+       ========================================== -->
+  <section class="subpage-header">
+    <div class="hero-parallax-bg" style="background-image: url('assets/images/stadium_hero.png');"></div>
+    <div class="subpage-header-content">
+      <h2>AI Fan Photo Booth</h2>
+      <p>Transform your look into a premium campaign poster. Put on your country colors, stand under stadium lights, and share the hype.</p>
+    </div>
+  </section>
+
+  <section id="booth" class="booth-section reveal-item" style="padding-top: 50px;">
+    <div class="back-nav-wrap" style="max-width: 1200px; margin: 0 auto 25px auto; width: 100%; text-align: left;">
+      <a href="registration.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; font-size: 0.85rem; border-radius: 30px;">
+        <span>←</span> Back to Dashboard
+      </a>
+    </div>
+    <div class="glass-card booth-container reveal-item">
+      <!-- Controls Layout -->
+      <div class="booth-controls">
+        
+        <!-- Step 1: Capture or Upload -->
+        <div class="reveal-item reveal-stagger-1">
+          <div class="booth-step-title"><span>1</span> Choose Photo Source</div>
+          <div class="booth-upload-grid">
+            <div class="booth-opt-btn active" id="opt-upload" onclick="toggleBoothSource('upload')">
+              <div class="booth-opt-icon">📁</div>
+              <span>Upload Image</span>
+            </div>
+            <div class="booth-opt-btn" id="opt-webcam" onclick="toggleBoothSource('webcam')">
+              <div class="booth-opt-icon">📷</div>
+              <span>Use Webcam</span>
+            </div>
+            
+            <div class="webcam-stream-wrap" id="webcam-stream-wrap">
+              <video id="webcam-video" autoplay playsinline muted></video>
+              <button class="webcam-snap-btn" type="button" onclick="captureWebcamSnap()">Snap Photo 📸</button>
+            </div>
+            
+            <div class="form-group full-width" id="booth-file-input-wrap" style="margin-top: 15px;">
+              <input type="file" id="booth-upload-file" accept="image/*" onchange="loadBoothUserImage(event)">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Step 2: Select Theme Overlay -->
+        <div class="reveal-item reveal-stagger-2">
+          <div class="booth-step-title"><span>2</span> Select Poster Template</div>
+          <div class="themes-grid">
+            <div class="theme-card selected" data-theme="stadium" onclick="selectBoothTheme(this)">
+              <div class="theme-card-icon">🏆</div>
+              <div class="theme-card-title">Stadium Champion</div>
+            </div>
+            <div class="theme-card" data-theme="fan" onclick="selectBoothTheme(this)">
+              <div class="theme-card-icon">📣</div>
+              <div class="theme-card-title">Country Fan Poster</div>
+            </div>
+            <div class="theme-card" data-theme="jersey" onclick="selectBoothTheme(this)">
+              <div class="theme-card-icon">👕</div>
+              <div class="theme-card-title">Football Jersey</div>
+            </div>
+            <div class="theme-card" data-theme="trophy" onclick="selectBoothTheme(this)">
+              <div class="theme-card-icon">🏅</div>
+              <div class="theme-card-title">Trophy Celeb</div>
+            </div>
+            <div class="theme-card" data-theme="matchday" onclick="selectBoothTheme(this)">
+              <div class="theme-card-icon">🎫</div>
+              <div class="theme-card-title">Match Day Card</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Step 3: Trigger Poster Compositing -->
+        <div class="reveal-item reveal-stagger-3">
+          <div class="booth-step-title"><span>3</span> Process & Render</div>
+          <button onclick="generateAIFanPhoto()" class="btn btn-accent" style="width: 100%;" id="generate-booth-btn">Generate AI Football Photo ✨</button>
+        </div>
+      </div>
+      
+      <!-- Live Preview Canvas Output -->
+      <div class="booth-preview-wrap reveal-item reveal-stagger-2">
+        <div class="glass-card booth-preview-card">
+          <div class="canvas-preview-frame" id="canvas-preview-frame">
+            <div class="canvas-placeholder-text" id="canvas-placeholder">
+              <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              <p>Upload a photo or snap a picture and select a theme template to see your premium AI campaign poster generated here.</p>
+            </div>
+            <!-- Canvas where images are composited -->
+            <canvas id="booth-canvas" width="640" height="800" style="display: none;"></canvas>
+          </div>
+          
+          <div class="booth-preview-actions">
+            <button onclick="downloadBoothPoster()" class="btn btn-primary btn-disabled" id="booth-download-btn">Download Poster 💾</button>
+            <button onclick="shareBoothPoster()" class="btn btn-secondary btn-disabled" id="booth-share-btn">Add to Gallery 📣</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       AI PHOTO GALLERY SECTION
+       ========================================== -->
+  <section id="gallery" class="gallery-section reveal-item" style="border-top: 1px solid var(--border-glass); padding-top: 80px;">
+    <div class="back-nav-wrap" style="max-width: 1200px; margin: 0 auto 25px auto; width: 100%; text-align: left;">
+      <a href="registration.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; font-size: 0.85rem; border-radius: 30px;">
+        <span>←</span> Back to Dashboard
+      </a>
+    </div>
+    <div class="section-title">
+      <h2>Social Fan Gallery</h2>
+      <p>Check out campaign cards created by supporters worldwide. Filter by country and like your favorites!</p>
+    </div>
+    
+    <div class="gallery-filters reveal-item" id="gallery-filters">
+      <button class="filter-btn active" onclick="filterGallery('all')">All Countries</button>
+      <button class="filter-btn" onclick="filterGallery('Argentina')">Argentina 🇦🇷</button>
+      <button class="filter-btn" onclick="filterGallery('Brazil')">Brazil 🇧🇷</button>
+      <button class="filter-btn" onclick="filterGallery('Germany')">Germany 🇩🇪</button>
+      <button class="filter-btn" onclick="filterGallery('France')">France 🇫🇷</button>
+      <button class="filter-btn" onclick="filterGallery('England')">England 🏴󠁧󠁢󠁥󠁮󠁧󠁿</button>
+      <button class="filter-btn" onclick="filterGallery('Spain')">Spain 🇪🇸</button>
+      <button class="filter-btn" onclick="filterGallery('Japan')">Japan 🇯🇵</button>
+      <button class="filter-btn" onclick="filterGallery('USA')">USA 🇺🇸</button>
+    </div>
+    
+    <div class="gallery-grid reveal-item" id="gallery-grid">
+      <!-- Generated items will be prepended here, followed by default mocks -->
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+          <img src="assets/images/ruchi_logo.jpg" alt="Ruchi Logo" style="height: 42px; width: auto; border-radius: 4px;">
+          <span>RUCCHI<span>2026</span></span>
+        </a>
+        <p>Bringing fans closer to the action of the FIFA World Cup 2026. Register, compete, play, and win with Ruchi Football Fever.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon">F</a>
+          <a href="#" class="social-icon">X</a>
+          <a href="#" class="social-icon">I</a>
+          <a href="#" class="social-icon">Y</a>
+        </div>
+      </div>
+
+      
+      <div class="footer-col">
+        <h4>Contact Information</h4>
+        <p>Email: event2026@rucchi-football.com<br>Phone: +880 9612-RUCCHI<br>Address: Level 8, Sports Tower, Dhaka</p>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ruchi Football Campaign. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+  <script src="photobooth.js"></script>
+</body>
+</html>

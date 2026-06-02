@@ -2418,7 +2418,7 @@ section {
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
   margin-top: 35px;
   width: 100%;
@@ -2536,9 +2536,22 @@ section {
   box-shadow: 0 20px 45px rgba(162, 155, 254, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+.card-leaderboard {
+  border-color: rgba(255, 229, 0, 0.2);
+}
+
+.card-leaderboard .dash-card-icon {
+  color: #ffe500;
+}
+
+.card-leaderboard:hover {
+  border-color: rgba(255, 229, 0, 0.6);
+  box-shadow: 0 20px 45px rgba(255, 229, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
 @media (max-width: 768px) {
   .dashboard-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
   }
   

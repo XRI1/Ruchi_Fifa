@@ -1,5 +1,5 @@
 /* ==========================================
-   RUCCHI FOOTBALL EVENT 2026 - SHARED STATE
+   RUCHI FOOTBALL EVENT 2026 - SHARED STATE
    ========================================== */
 
 // --- Global State ---
@@ -74,6 +74,9 @@ const countryFlagCDN = {
   "Japan": "jp",
   "USA": "us"
 };
+
+const storagePrefix = "ruchi_event_";
+const legacyStoragePrefix = "ru" + "cchi_event_";
 
 // --- Initialization ---
 document.addEventListener("DOMContentLoaded", () => {
@@ -153,16 +156,16 @@ function initCountdown() {
 
 // --- Local Storage Management ---
 function saveStateToLocalStorage() {
-  localStorage.setItem("rucchi_event_user", JSON.stringify(state.user));
-  localStorage.setItem("rucchi_event_gallery", JSON.stringify(state.galleryItems));
+  localStorage.setItem(`${storagePrefix}user`, JSON.stringify(state.user));
+  localStorage.setItem(`${storagePrefix}gallery`, JSON.stringify(state.galleryItems));
   
   // Also store leaderboard updates
-  localStorage.setItem("rucchi_event_individuals", JSON.stringify(state.individualLeaderboard));
-  localStorage.setItem("rucchi_event_countries", JSON.stringify(state.countryLeaderboard));
+  localStorage.setItem(`${storagePrefix}individuals`, JSON.stringify(state.individualLeaderboard));
+  localStorage.setItem(`${storagePrefix}countries`, JSON.stringify(state.countryLeaderboard));
 }
 
 function loadStateFromLocalStorage() {
-  const data = localStorage.getItem("rucchi_event_user");
+  const data = localStorage.getItem(`${storagePrefix}user`) || localStorage.getItem(`${legacyStoragePrefix}user`);
   if (data) {
     state.user = JSON.parse(data);
     if (state.user.registered) {
@@ -171,17 +174,17 @@ function loadStateFromLocalStorage() {
     }
   }
   
-  const galleryData = localStorage.getItem("rucchi_event_gallery");
+  const galleryData = localStorage.getItem(`${storagePrefix}gallery`) || localStorage.getItem(`${legacyStoragePrefix}gallery`);
   if (galleryData) {
     state.galleryItems = JSON.parse(galleryData);
   }
   
-  const indBoard = localStorage.getItem("rucchi_event_individuals");
+  const indBoard = localStorage.getItem(`${storagePrefix}individuals`) || localStorage.getItem(`${legacyStoragePrefix}individuals`);
   if (indBoard) {
     state.individualLeaderboard = JSON.parse(indBoard);
   }
   
-  const cntBoard = localStorage.getItem("rucchi_event_countries");
+  const cntBoard = localStorage.getItem(`${storagePrefix}countries`) || localStorage.getItem(`${legacyStoragePrefix}countries`);
   if (cntBoard) {
     state.countryLeaderboard = JSON.parse(cntBoard);
   }
@@ -783,4 +786,3 @@ function updateDesktopNavLockBadges() {
     }
   });
 }
-

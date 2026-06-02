@@ -1,5 +1,5 @@
 /* ==========================================
-   RUCCHI AI PHOTO BOOTH - OVERLAY COMPOSITOR
+   RUCHI AI PHOTO BOOTH - OVERLAY COMPOSITOR
    ========================================== */
 
 let boothUserImage = null; // Image object of user face
@@ -169,7 +169,7 @@ function drawThemeOverlay(bCtx, width, height, colors, country, flag) {
   bCtx.strokeStyle = "rgba(255, 255, 255, 0.1)";
   bCtx.strokeRect(20, height - 150, width - 40, 130);
   
-  const userDisplayName = state.user.registered ? state.user.name.toUpperCase() : "RUCCHI FAN";
+  const userDisplayName = state.user.registered ? state.user.name.toUpperCase() : "RUCHI FAN";
   
   if (currentTheme === "stadium") {
     // Stadium Champion
@@ -279,7 +279,7 @@ function drawThemeOverlay(bCtx, width, height, colors, country, flag) {
       bCtx.fillRect(width - 150 + (i*4), height - 110, barW, 60);
     }
     bCtx.font = "900 9px monospace";
-    bCtx.fillText("*RUCCHI2026*", width - 130, height - 35);
+    bCtx.fillText("*RUCHI2026*", width - 130, height - 35);
   }
 }
 
@@ -302,7 +302,7 @@ window.shareBoothPoster = function() {
   // Append item to state gallery array
   const country = state.user.registered ? state.user.supportingCountry : "Brazil";
   const flag = countryFlags[country] || "🇧🇷";
-  const username = state.user.registered ? state.user.name : "Rucchi Supporter";
+  const username = state.user.registered ? state.user.name : "Ruchi Supporter";
   const userAvatar = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=80&q=80";
   
   const newItem = {

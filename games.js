@@ -1,5 +1,5 @@
 /* ==========================================
-   RUCCHI FOOTBALL ARCADE - GAME ENGINES
+   RUCHI FOOTBALL ARCADE - GAME ENGINES
    ========================================== */
 
 let activeGame = null; // 'penalty' or 'runner'
@@ -615,7 +615,7 @@ function drawStaticPreview() {
   ctx.fillStyle = "#ffffff";
   ctx.font = "900 28px 'Syncopate'";
   ctx.textAlign = "center";
-  ctx.fillText("RUCCHI FOOTBALL ARCADE", 400, 220);
+  ctx.fillText("RUCHI FOOTBALL ARCADE", 400, 220);
   
   ctx.fillStyle = varColorText();
   ctx.font = "bold 14px 'Outfit'";

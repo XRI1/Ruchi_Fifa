@@ -3243,8 +3243,35 @@ section {
   animation: none;
 }
 
+.badge-logo {
+  max-width: min(260px, 56vw);
+  padding: 0;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  margin-bottom: 14px;
+}
+
+.badge-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .countdown-container {
   gap: 10px;
+}
+
+.hero-content p {
+  margin-bottom: 24px;
+}
+
+.hero-actions {
+  margin-bottom: 28px;
+}
+
+.countdown-container {
+  padding: 16px 24px;
 }
 
 .countdown-num,
@@ -3378,6 +3405,28 @@ input[type="file"] {
 @media (max-width: 768px) {
   section {
     padding-top: 72px;
+  }
+
+  .hero {
+    padding-top: 84px;
+    padding-bottom: 30px;
+  }
+
+  .badge-logo {
+    max-width: min(210px, 58vw);
+    margin-bottom: 12px;
+  }
+
+  .hero-content p {
+    margin-bottom: 18px;
+  }
+
+  .hero-actions {
+    margin-bottom: 22px;
+  }
+
+  .countdown-container {
+    padding: 12px 10px;
   }
 
   .glass-card,

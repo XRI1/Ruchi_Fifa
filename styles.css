@@ -3324,6 +3324,51 @@ input[type="file"] {
   color: #ffad2b;
 }
 
+.nav-lock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  padding: 2px 6px;
+  border: 1px solid rgba(255, 174, 43, 0.3);
+  border-radius: 999px;
+  color: #ffad2b;
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.app-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 94px;
+  z-index: 3000;
+  max-width: min(360px, calc(100vw - 32px));
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(7, 10, 18, 0.94);
+  color: #fff;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.app-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.app-toast.toast-success {
+  border-color: rgba(56, 239, 125, 0.36);
+}
+
+.app-toast.toast-error {
+  border-color: rgba(255, 91, 118, 0.5);
+}
+
 .footer {
   background:
     linear-gradient(180deg, rgba(7, 10, 18, 0), rgba(4, 6, 13, 0.9) 22%),

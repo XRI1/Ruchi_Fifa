@@ -6,6 +6,42 @@ let boothUserImage = null; // Image object of user face
 let currentTheme = "stadium"; // 'stadium', 'fan', 'jersey', 'trophy', 'matchday'
 let webcamStream = null;
 
+function boothNotify(message, type = "info") {
+  if (typeof showToast === "function") {
+    showToast(message, type);
+  } else {
+    alert(message);
+  }
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function drawImageCover(ctx, image, width, height) {
+  const imageRatio = image.width / image.height;
+  const canvasRatio = width / height;
+  let drawWidth = width;
+  let drawHeight = height;
+  let drawX = 0;
+  let drawY = 0;
+
+  if (imageRatio > canvasRatio) {
+    drawWidth = height * imageRatio;
+    drawX = (width - drawWidth) / 2;
+  } else {
+    drawHeight = width / imageRatio;
+    drawY = (height - drawHeight) / 2;
+  }
+
+  ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+}
+
 // Color themes based on countries
 const teamColors = {
   "Argentina": { primary: "#74acdf", secondary: "#ffffff", accent: "#f6b426" },
@@ -56,11 +92,11 @@ function startWebcam(videoElement) {
       })
       .catch(err => {
         console.error("Camera access error: ", err);
-        alert("Could not access camera. Please upload an image instead.");
+        boothNotify("Could not access camera. Please upload an image instead.", "error");
         toggleBoothSource('upload');
       });
   } else {
-    alert("Webcam is not supported in this browser. Please upload an image.");
+    boothNotify("Webcam is not supported in this browser. Please upload an image.", "error");
     toggleBoothSource('upload');
   }
 }
@@ -87,7 +123,7 @@ window.captureWebcamSnap = function() {
   // Save as image object
   boothUserImage = new Image();
   boothUserImage.onload = function() {
-    alert("Selfie captured successfully! Choose your theme and click 'Generate'.");
+    boothNotify("Selfie captured. Choose a template and generate your poster.", "success");
   };
   boothUserImage.src = snapCanvas.toDataURL("image/png");
   
@@ -110,7 +146,7 @@ window.loadBoothUserImage = function(event) {
   reader.onload = function(e) {
     boothUserImage = new Image();
     boothUserImage.onload = function() {
-      // Image ready to compose
+      boothNotify("Photo loaded. Choose a template and generate your poster.", "success");
     };
     boothUserImage.src = e.target.result;
   };
@@ -129,7 +165,7 @@ window.selectBoothTheme = function(element) {
 // --- Generate AI Photo Composite ---
 window.generateAIFanPhoto = function() {
   if (!boothUserImage) {
-    alert("Please upload a photo or snap a picture with your webcam first!");
+    boothNotify("Please upload a photo or snap a picture first.", "error");
     return;
   }
   
@@ -137,20 +173,29 @@ window.generateAIFanPhoto = function() {
   const bCtx = bCanvas.getContext("2d");
   const previewPlaceholder = document.getElementById("canvas-placeholder");
   
-  const neymarImg = new Image();
-  neymarImg.onload = function() {
-    bCtx.clearRect(0, 0, bCanvas.width, bCanvas.height);
-    bCtx.drawImage(neymarImg, 0, 0, bCanvas.width, bCanvas.height);
-    
-    // Show Canvas
-    previewPlaceholder.style.display = "none";
-    bCanvas.style.display = "block";
-    
-    // Enable buttons
-    document.getElementById("booth-download-btn").classList.remove("btn-disabled");
-    document.getElementById("booth-share-btn").classList.remove("btn-disabled");
-  };
-  neymarImg.src = "assets/images/neymar_fan.png";
+  bCtx.clearRect(0, 0, bCanvas.width, bCanvas.height);
+  drawImageCover(bCtx, boothUserImage, bCanvas.width, bCanvas.height);
+
+  const country = state.user.registered ? state.user.supportingCountry : "Brazil";
+  const flag = countryFlags[country] || "";
+  const colors = teamColors[country] || teamColors.Brazil;
+
+  const gradient = bCtx.createLinearGradient(0, 0, 0, bCanvas.height);
+  gradient.addColorStop(0, "rgba(6, 9, 19, 0.08)");
+  gradient.addColorStop(0.62, "rgba(6, 9, 19, 0.16)");
+  gradient.addColorStop(1, "rgba(6, 9, 19, 0.72)");
+  bCtx.fillStyle = gradient;
+  bCtx.fillRect(0, 0, bCanvas.width, bCanvas.height);
+  drawThemeOverlay(bCtx, bCanvas.width, bCanvas.height, colors, country, flag);
+  
+  // Show Canvas
+  previewPlaceholder.style.display = "none";
+  bCanvas.style.display = "block";
+  
+  // Enable buttons
+  document.getElementById("booth-download-btn").classList.remove("btn-disabled");
+  document.getElementById("booth-share-btn").classList.remove("btn-disabled");
+  boothNotify("Poster generated. You can download it or add it to the gallery.", "success");
 };
 
 function drawThemeOverlay(bCtx, width, height, colors, country, flag) {
@@ -289,7 +334,7 @@ window.downloadBoothPoster = function() {
   const dataURL = bCanvas.toDataURL("image/png");
   
   const link = document.createElement("a");
-  link.download = "rucci_football_fever_poster.png";
+  link.download = "ruchi_football_fever_poster.png";
   link.href = dataURL;
   link.click();
 };
@@ -324,7 +369,7 @@ window.shareBoothPoster = function() {
   // Redraw gallery grid
   renderGalleryGrid();
   
-  alert("Poster successfully shared to the Social Fan Gallery! Scroll down to see it.");
+  boothNotify("Poster shared to the Social Fan Gallery.", "success");
   
   // Reset buttons
   document.getElementById("booth-share-btn").classList.add("btn-disabled");
@@ -343,24 +388,30 @@ function renderGalleryGrid() {
   
   // Add dynamic items from state
   state.galleryItems.forEach(item => {
+    const country = escapeHtml(item.country);
+    const username = escapeHtml(item.username);
+    const flag = escapeHtml(item.flag);
+    const image = escapeHtml(item.image);
+    const userAvatar = escapeHtml(item.userAvatar);
+    const likes = Number.isFinite(Number(item.likes)) ? Number(item.likes) : 1;
     htmlContent += `
-      <div class="gallery-item" data-country="${item.country}">
+      <div class="gallery-item" data-country="${country}">
         <div class="gallery-img-wrap">
-          <img src="${item.image}" alt="${item.country} Fan Poster">
+          <img src="${image}" alt="${country} Fan Poster">
         </div>
         <div class="gallery-meta">
           <div class="gallery-user-info">
-            <img src="${item.userAvatar}" alt="${item.username}" class="gallery-user-img">
+            <img src="${userAvatar}" alt="${username}" class="gallery-user-img">
             <div>
-              <span class="gallery-username">${item.username}</span>
-              <span class="gallery-user-flag">${item.flag}</span>
+              <span class="gallery-username">${username}</span>
+              <span class="gallery-user-flag">${flag}</span>
             </div>
           </div>
           <button class="gallery-like-btn liked" onclick="toggleLike(this)">
             <svg width="18" height="18" fill="red" stroke="red" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
             </svg>
-            <span class="like-count">${item.likes}</span>
+            <span class="like-count">${likes}</span>
           </button>
         </div>
       </div>

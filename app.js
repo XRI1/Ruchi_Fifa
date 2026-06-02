@@ -77,15 +77,18 @@ const countryFlagCDN = {
 
 const storagePrefix = "ruchi_event_";
 const legacyStoragePrefix = "ru" + "cchi_event_";
+const countryBaseScores = state.countryLeaderboard.map(country => ({ ...country }));
 
 // --- Initialization ---
 document.addEventListener("DOMContentLoaded", () => {
   loadStateFromLocalStorage();
   initCountdown();
   renderLeaderboards();
+  injectDesktopNav();
   initNavbarScroll();
   setupInitialGalleryMockURLs();
   syncNavbarProfileButton();
+  enhanceInteractiveControls();
   initParallax();
   initScrollReveal();
   syncSportsTicker();
@@ -120,6 +123,102 @@ function syncNavbarProfileButton() {
       }
     }
   }
+}
+
+function injectDesktopNav() {
+  const navbar = document.getElementById("navbar");
+  if (!navbar || navbar.querySelector(".nav-links")) return;
+
+  const currentFile = getCurrentFileName();
+  const links = [
+    { href: "index.html", label: "Home" },
+    { href: "campaign.html", label: "Campaign" },
+    { href: "registration.html", label: state.user.registered ? "Dashboard" : "Register" },
+    { href: "games.html", label: "Games", locked: !state.user.registered },
+    { href: "leaderboard.html", label: "Leaderboard" },
+    { href: "photobooth.html", label: "Photo Booth", locked: !state.user.registered }
+  ];
+
+  const navList = document.createElement("ul");
+  navList.className = "nav-links";
+  navList.setAttribute("aria-label", "Primary navigation");
+  navList.innerHTML = links.map(link => {
+    const active = currentFile === link.href ? "active" : "";
+    const ariaCurrent = active ? ` aria-current="page"` : "";
+    const lock = link.locked ? `<span class="nav-lock" aria-label="Registration required">Locked</span>` : "";
+    return `<li><a href="${link.href}" class="${active}"${ariaCurrent}>${link.label}${lock}</a></li>`;
+  }).join("");
+
+  const cta = navbar.querySelector(".nav-cta");
+  navbar.insertBefore(navList, cta || null);
+}
+
+function refreshDesktopNav() {
+  const navList = document.querySelector(".nav-links");
+  if (navList) navList.remove();
+  injectDesktopNav();
+}
+
+function getCurrentFileName() {
+  const currentPath = window.location.pathname;
+  return currentPath.substring(currentPath.lastIndexOf("/") + 1) || "index.html";
+}
+
+function showToast(message, type = "info") {
+  const existing = document.querySelector(".app-toast");
+  if (existing) existing.remove();
+
+  const toast = document.createElement("div");
+  toast.className = `app-toast toast-${type}`;
+  toast.setAttribute("role", "status");
+  toast.setAttribute("aria-live", "polite");
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  window.setTimeout(() => toast.classList.add("show"), 10);
+  window.setTimeout(() => {
+    toast.classList.remove("show");
+    window.setTimeout(() => toast.remove(), 250);
+  }, 3200);
+}
+
+function enhanceInteractiveControls() {
+  document.querySelectorAll(".country-card, .booth-opt-btn, .theme-card").forEach(card => {
+    if (!card.hasAttribute("tabindex")) card.setAttribute("tabindex", "0");
+    if (!card.hasAttribute("role")) card.setAttribute("role", "button");
+    card.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        card.click();
+      }
+    });
+  });
+}
+
+function getStoredValue(key) {
+  return localStorage.getItem(`${storagePrefix}${key}`) || localStorage.getItem(`${legacyStoragePrefix}${key}`);
+}
+
+function safeJsonParse(value, fallback) {
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    console.warn("Stored campaign data could not be loaded.", error);
+    return fallback;
+  }
+}
+
+function sanitizeText(value) {
+  return String(value || "").trim().replace(/\s+/g, " ");
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 // --- Countdown Timer ---
@@ -165,28 +264,36 @@ function saveStateToLocalStorage() {
 }
 
 function loadStateFromLocalStorage() {
-  const data = localStorage.getItem(`${storagePrefix}user`) || localStorage.getItem(`${legacyStoragePrefix}user`);
+  const data = getStoredValue("user");
   if (data) {
-    state.user = JSON.parse(data);
+    const storedUser = safeJsonParse(data, state.user);
+    state.user = {
+      ...state.user,
+      ...storedUser,
+      personalBest: {
+        ...state.user.personalBest,
+        ...(storedUser.personalBest || {})
+      }
+    };
     if (state.user.registered) {
       showRegistrationSuccess();
       updateArcadeHUDPersonalBest();
     }
   }
   
-  const galleryData = localStorage.getItem(`${storagePrefix}gallery`) || localStorage.getItem(`${legacyStoragePrefix}gallery`);
+  const galleryData = getStoredValue("gallery");
   if (galleryData) {
-    state.galleryItems = JSON.parse(galleryData);
+    state.galleryItems = safeJsonParse(galleryData, []);
   }
   
-  const indBoard = localStorage.getItem(`${storagePrefix}individuals`) || localStorage.getItem(`${legacyStoragePrefix}individuals`);
+  const indBoard = getStoredValue("individuals");
   if (indBoard) {
-    state.individualLeaderboard = JSON.parse(indBoard);
+    state.individualLeaderboard = safeJsonParse(indBoard, state.individualLeaderboard);
   }
   
-  const cntBoard = localStorage.getItem(`${storagePrefix}countries`) || localStorage.getItem(`${legacyStoragePrefix}countries`);
+  const cntBoard = getStoredValue("countries");
   if (cntBoard) {
-    state.countryLeaderboard = JSON.parse(cntBoard);
+    state.countryLeaderboard = safeJsonParse(cntBoard, state.countryLeaderboard);
   }
 }
 
@@ -203,6 +310,7 @@ window.selectCountry = function(element) {
   // Set hidden input
   const hiddenInput = document.getElementById("selected-country-val");
   if (hiddenInput) hiddenInput.value = countryName;
+  showToast(`${countryName} selected as your team.`, "success");
 };
 
 // Avatar upload removed, Jersey Number field added instead
@@ -210,15 +318,20 @@ window.selectCountry = function(element) {
 window.handleRegistration = function(event) {
   event.preventDefault();
   
-  const name = document.getElementById("reg-name").value;
-  const phone = document.getElementById("reg-phone").value;
-  const email = document.getElementById("reg-email").value;
-  const location = document.getElementById("reg-location").value;
+  const name = sanitizeText(document.getElementById("reg-name").value);
+  const phone = sanitizeText(document.getElementById("reg-phone").value);
+  const email = sanitizeText(document.getElementById("reg-email").value);
+  const location = sanitizeText(document.getElementById("reg-location").value);
   const jerseyNumber = document.getElementById("reg-jersey").value;
   const country = document.getElementById("selected-country-val").value;
   
   if (!country) {
-    alert("Please select a supporting country first!");
+    showToast("Please select a supporting country first.", "error");
+    return;
+  }
+
+  if (!name || !phone || !email || !location) {
+    showToast("Please complete all registration fields.", "error");
     return;
   }
   
@@ -226,7 +339,7 @@ window.handleRegistration = function(event) {
   state.user.phone = phone;
   state.user.email = email;
   state.user.location = location;
-  state.user.jerseyNumber = parseInt(jerseyNumber) || 10;
+  state.user.jerseyNumber = Math.min(99, Math.max(1, parseInt(jerseyNumber, 10) || 10));
   state.user.supportingCountry = country;
   state.user.registered = true;
   
@@ -234,7 +347,9 @@ window.handleRegistration = function(event) {
   showRegistrationSuccess();
   updateLeaderboardScores();
   syncNavbarProfileButton();
+  refreshDesktopNav();
   syncSportsTicker();
+  showToast("Registration saved. Your dashboard is ready.", "success");
   
   // Remove locks dynamically
   const bottomNav = document.querySelector(".mobile-bottom-nav");
@@ -315,17 +430,16 @@ function updateLeaderboardScores() {
     player.rank = idx + 1;
   });
   
-  // 2. Update Country Scores
-  const countryIndex = state.countryLeaderboard.findIndex(c => c.country === state.user.supportingCountry);
+  // 2. Rebuild country scores from stable base values plus the user's current contribution.
+  const refreshedCountries = countryBaseScores.map(country => ({ ...country }));
+  const countryIndex = refreshedCountries.findIndex(c => c.country === state.user.supportingCountry);
   if (countryIndex !== -1) {
-    const currentContribution = state.user.personalBest.penalty + state.user.personalBest.runner;
-    // We add user contribution divided by 10 to standard country total
-    state.countryLeaderboard[countryIndex].score = 
-      state.countryLeaderboard[countryIndex].score + Math.floor(currentContribution / 10);
-    state.countryLeaderboard[countryIndex].supporters += 1;
+    const currentContribution = state.user.personalBest.penalty || 0;
+    refreshedCountries[countryIndex].score += Math.floor(currentContribution / 10);
+    refreshedCountries[countryIndex].supporters += 1;
     
     // Sort and re-rank
-    state.countryLeaderboard.sort((a, b) => b.score - a.score);
+    state.countryLeaderboard = refreshedCountries.sort((a, b) => b.score - a.score);
     state.countryLeaderboard.forEach((c, idx) => {
       c.rank = idx + 1;
     });
@@ -339,19 +453,33 @@ window.switchLeaderboard = function(tab) {
   const tabs = document.querySelectorAll(".leaderboard-tab-btn");
   if (tabs.length === 0) return;
   
-  tabs.forEach(t => t.classList.remove("active"));
+  tabs.forEach(t => {
+    t.classList.remove("active");
+    t.setAttribute("aria-selected", "false");
+  });
   
   const panels = document.querySelectorAll(".leaderboard-panel");
-  panels.forEach(p => p.classList.remove("active"));
+  panels.forEach(p => {
+    p.classList.remove("active");
+    p.setAttribute("hidden", "");
+  });
   
   if (tab === "individual") {
     tabs[0].classList.add("active");
+    tabs[0].setAttribute("aria-selected", "true");
     const panel = document.getElementById("panel-individual");
-    if (panel) panel.classList.add("active");
+    if (panel) {
+      panel.classList.add("active");
+      panel.removeAttribute("hidden");
+    }
   } else {
     tabs[1].classList.add("active");
+    tabs[1].setAttribute("aria-selected", "true");
     const panel = document.getElementById("panel-country");
-    if (panel) panel.classList.add("active");
+    if (panel) {
+      panel.classList.add("active");
+      panel.removeAttribute("hidden");
+    }
   }
 };
 
@@ -399,19 +527,21 @@ function renderLeaderboardPanel(type, data) {
       
       const flagCode = countryFlagCDN[item.country] || "ar";
       const jerseyBadgeVal = item.isUser ? state.user.jerseyNumber : "10";
+      const playerName = escapeHtml(item.name);
+      const countryName = escapeHtml(item.country);
       
       row.innerHTML = `
         <td><span class="rank-badge">${item.rank}</span></td>
         <td>
           <div class="player-info">
             <span class="player-jersey-badge" style="background: var(--primary-neon); color: var(--text-dark); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 3px 6px rgba(0,0,0,0.3);">#${jerseyBadgeVal}</span>
-            <span>${item.name}</span>
+            <span>${playerName}</span>
           </div>
         </td>
         <td>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <img src="https://flagcdn.com/w40/${flagCode}.png" alt="${item.country}" style="height: 16px; width: 24px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); object-fit: cover;">
-            <span>${item.country}</span>
+            <img src="https://flagcdn.com/w40/${flagCode}.png" alt="${countryName}" style="height: 16px; width: 24px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); object-fit: cover;">
+            <span>${countryName}</span>
           </div>
         </td>
         <td class="score-col" style="text-align: right;">${item.score}</td>
@@ -435,13 +565,14 @@ function renderLeaderboardPanel(type, data) {
       row.className = rankClass;
       const progressPercent = Math.min(100, Math.floor((item.score / maxScore) * 100));
       const flagCode = countryFlagCDN[item.country] || "ar";
+      const countryName = escapeHtml(item.country);
       
       row.innerHTML = `
         <td><span class="rank-badge">${item.rank}</span></td>
         <td>
           <div class="country-info" style="display: flex; align-items: center; gap: 8px;">
-            <img src="https://flagcdn.com/w40/${flagCode}.png" alt="${item.country}" style="height: 16px; width: 24px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); object-fit: cover;">
-            <span>${item.country}</span>
+            <img src="https://flagcdn.com/w40/${flagCode}.png" alt="${countryName}" style="height: 16px; width: 24px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); object-fit: cover;">
+            <span>${countryName}</span>
           </div>
         </td>
         <td>

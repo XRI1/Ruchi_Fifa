@@ -20,6 +20,10 @@ let goalNet = { x: 150, y: 80, width: 500, height: 180 };
 let shotStatusText = "";
 let shotStatusTime = 0;
 
+function isBanglaMode() {
+  return typeof window.getAppLanguage === "function" && window.getAppLanguage() === "bn";
+}
+
 // Runner variables
 let runnerPlayer = { lane: 1, targetX: 400, x: 400, y: 360, radius: 20 };
 let runnerLanes = [250, 400, 550]; // X positions for 3 lanes
@@ -53,9 +57,11 @@ window.launchGame = function(gameKey) {
   document.getElementById("game-result-overlay").style.display = "none";
   
   if (gameKey === "penalty") {
-    document.getElementById("game-title").innerText = "Penalty Shootout Challenge ⚽";
-    document.getElementById("start-overlay-title").innerText = "Ready to Shoot?";
-    document.getElementById("start-overlay-desc").innerText = "Use your mouse/touch to aim inside the net. Click to take a shot! Target the top corners for a bonus, but avoid the goalkeeper!";
+    document.getElementById("game-title").innerText = isBanglaMode() ? "পেনাল্টি শুটআউট চ্যালেঞ্জ" : "Penalty Shootout Challenge";
+    document.getElementById("start-overlay-title").innerText = isBanglaMode() ? "শট নিতে প্রস্তুত?" : "Ready to Shoot?";
+    document.getElementById("start-overlay-desc").innerText = isBanglaMode()
+      ? "মাউস/টাচ দিয়ে নেটের ভেতরে লক্ষ্য করুন। শট নিতে ক্লিক করুন! বোনাসের জন্য টপ কর্নার টার্গেট করুন, কিন্তু গোলকিপারকে এড়িয়ে চলুন।"
+      : "Use your mouse/touch to aim inside the net. Click to take a shot! Target the top corners for a bonus, but avoid the goalkeeper!";
   } else {
     document.getElementById("game-title").innerText = "Football Runner Challenge 🏃";
     document.getElementById("start-overlay-title").innerText = "Sprint down the Pitch!";

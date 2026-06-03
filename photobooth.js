@@ -6,11 +6,26 @@ let boothUserImage = null; // Image object of user face
 let currentTheme = "stadium"; // 'stadium', 'fan', 'jersey', 'trophy', 'matchday'
 let webcamStream = null;
 
+const boothBnText = {
+  "Could not access camera. Please upload an image instead.": "ক্যামেরা চালু করা যায়নি। অনুগ্রহ করে একটি ছবি আপলোড করুন।",
+  "Webcam is not supported in this browser. Please upload an image.": "এই ব্রাউজারে ওয়েবক্যাম সাপোর্ট নেই। অনুগ্রহ করে ছবি আপলোড করুন।",
+  "Selfie captured. Choose a template and generate your poster.": "সেলফি নেওয়া হয়েছে। একটি টেমপ্লেট বাছাই করে পোস্টার তৈরি করুন।",
+  "Photo loaded. Choose a template and generate your poster.": "ছবি লোড হয়েছে। একটি টেমপ্লেট বাছাই করে পোস্টার তৈরি করুন।",
+  "Please upload a photo or snap a picture first.": "প্রথমে একটি ছবি আপলোড করুন বা ছবি তুলুন।",
+  "Poster generated. You can download it or add it to the gallery.": "পোস্টার তৈরি হয়েছে। আপনি এটি ডাউনলোড করতে বা গ্যালারিতে যোগ করতে পারেন।",
+  "Poster shared to the Social Fan Gallery.": "পোস্টার সোশ্যাল ফ্যান গ্যালারিতে শেয়ার হয়েছে।"
+};
+
+function boothText(message) {
+  const lang = typeof window.getAppLanguage === "function" ? window.getAppLanguage() : "en";
+  return lang === "bn" ? (boothBnText[message] || message) : message;
+}
+
 function boothNotify(message, type = "info") {
   if (typeof showToast === "function") {
-    showToast(message, type);
+    showToast(boothText(message), type);
   } else {
-    alert(message);
+    alert(boothText(message));
   }
 }
 

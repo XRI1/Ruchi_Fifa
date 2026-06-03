@@ -10,6 +10,9 @@
 
 <body>
 
+  <!-- Premium Particle Canvas -->
+  <canvas id="particle-canvas"></canvas>
+
   <!-- ==========================================
        NAVIGATION BAR
        ========================================== -->
@@ -32,8 +35,8 @@
   <section class="subpage-header">
     <div class="hero-parallax-bg" style="background-image: url('assets/images/stadium_hero.png');"></div>
     <div class="subpage-header-content">
-      <h2>Register & Play</h2>
-      <p>Unlock access to the games, choose your country, and record your high scores.</p>
+      <h2 id="reg-header-title">Register & Play</h2>
+      <p id="reg-header-desc">Unlock access to the games, choose your country, and record your high scores.</p>
     </div>
   </section>
 
@@ -141,7 +144,7 @@
             <label for="reg-terms">I accept the terms and conditions of Ruchi Football Fever 2026 campaign.</label>
           </div>
 
-          <button type="submit" class="btn btn-primary" style="width: 100%;">Complete Registration & Play</button>
+          <button type="submit" class="btn btn-primary" id="reg-submit-btn" style="width: 100%;">Complete Registration & Play</button>
         </form>
       </div>
 
@@ -161,7 +164,7 @@
                   Brazil</span> | Jersey <span id="player-card-jersey">#10</span></p>
             </div>
           </div>
-
+          <button onclick="editRegistrationDetails()" class="btn btn-primary" id="edit-details-btn" style="padding: 10px 20px; font-size: 0.85rem; border-radius: 20px;">Edit Details ✏️</button>
         </div>
 
         <!-- Dashboard Menu Grid -->

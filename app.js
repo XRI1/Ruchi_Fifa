@@ -78,10 +78,233 @@ const countryFlagCDN = {
 const storagePrefix = "ruchi_event_";
 const legacyStoragePrefix = "ru" + "cchi_event_";
 const countryBaseScores = state.countryLeaderboard.map(country => ({ ...country }));
+const languageStorageKey = `${storagePrefix}language`;
+let currentLanguage = localStorage.getItem(languageStorageKey) || "en";
+
+const bnText = {
+  "Register Now": "এখনই রেজিস্টার করুন",
+  "Dashboard": "ড্যাশবোর্ড",
+  "Home": "হোম",
+  "Campaign": "ক্যাম্পেইন",
+  "Register": "রেজিস্টার",
+  "Games": "গেমস",
+  "Leaderboard": "লিডারবোর্ড",
+  "Photo Booth": "ফটো বুথ",
+  "AI Photo Booth": "এআই ফটো বুথ",
+  "Locked": "লকড",
+  "Profile": "প্রোফাইল",
+  "Standings": "স্ট্যান্ডিংস",
+  "Booth": "বুথ",
+  "Score for Your Nation": "আপনার দেশের জন্য স্কোর করুন",
+  "Lead the Board": "লিডারবোর্ডে এগিয়ে যান",
+  "Register, support your favorite country, play exciting games, earn points, and lead your team to the top of the global standings.": "রেজিস্টার করুন, পছন্দের দেশকে সাপোর্ট করুন, মজার গেম খেলুন, পয়েন্ট অর্জন করুন এবং আপনার দলকে গ্লোবাল স্ট্যান্ডিংসের শীর্ষে তুলুন।",
+  "Register Now âš¡": "এখনই রেজিস্টার করুন",
+  "Explore Games ðŸŽ®": "গেমস দেখুন",
+  "Days": "দিন",
+  "Hrs": "ঘণ্টা",
+  "Min": "মিনিট",
+  "Sec": "সেকেন্ড",
+  "Campaign Journey": "ক্যাম্পেইন জার্নি",
+  "Follow these simple steps to play, support your team, and win awesome sports rewards.": "খেলতে, আপনার দলকে সাপোর্ট করতে এবং দারুণ স্পোর্টস রিওয়ার্ড জিততে এই সহজ ধাপগুলো অনুসরণ করুন।",
+  "Register": "রেজিস্টার",
+  "Fill out your details to activate your player card.": "আপনার প্লেয়ার কার্ড চালু করতে তথ্য পূরণ করুন।",
+  "Select Country": "দেশ বাছাই করুন",
+  "Support a World Cup 2026 team visually.": "ওয়ার্ল্ড কাপ ২০২৬-এর একটি দলকে সাপোর্ট করুন।",
+  "Play Games": "গেম খেলুন",
+  "Play the Penalty Shootout Challenge.": "পেনাল্টি শুটআউট চ্যালেঞ্জ খেলুন।",
+  "Earn Points": "পয়েন্ট অর্জন করুন",
+  "Score goals and gather coins to stack up points.": "গোল করে পয়েন্ট বাড়ান।",
+  "Score goals to stack up your personal best score.": "গোল করে আপনার পার্সোনাল বেস্ট স্কোর বাড়ান।",
+  "Leaderboards": "লিডারবোর্ড",
+  "Climb individual ranks and push your team higher.": "নিজের র‍্যাঙ্ক বাড়ান এবং দলকে আরও ওপরে তুলুন।",
+  "Generate styled campaign cards and share them.": "স্টাইলিশ ক্যাম্পেইন কার্ড বানিয়ে শেয়ার করুন।",
+  "Win Rewards": "রিওয়ার্ড জিতুন",
+  "Top scorers score real Ruchi merchandise!": "টপ স্কোরাররা জিতবেন আসল রুচি মার্চেন্ডাইজ!",
+  "Learn More & View Rewards ðŸ†": "আরও জানুন ও রিওয়ার্ড দেখুন",
+  "Frequently Asked Questions": "সচরাচর জিজ্ঞাসা",
+  "Got questions about the Ruchi Campaign? Here is everything you need to know.": "রুচি ক্যাম্পেইন নিয়ে প্রশ্ন আছে? প্রয়োজনীয় সব তথ্য এখানে।",
+  "How do I register?": "আমি কীভাবে রেজিস্টার করব?",
+  "Can I change my supporting country?": "আমি কি সাপোর্ট করা দেশ বদলাতে পারব?",
+  "How are scores calculated?": "স্কোর কীভাবে হিসাব করা হয়?",
+  "How many attempts can I make?": "আমি কতবার চেষ্টা করতে পারব?",
+  "Contact Information": "যোগাযোগের তথ্য",
+  "Bringing fans closer to the action of the FIFA World Cup 2026. Register, compete, play, and win with Ruchi Football Fever.": "ফিফা ওয়ার্ল্ড কাপ ২০২৬-এর উত্তেজনার আরও কাছে ভক্তদের নিয়ে আসছে রুচি ফুটবল ফিভার। রেজিস্টার করুন, প্রতিযোগিতা করুন, খেলুন এবং জিতুন।",
+  "© 2026 Ruchi Football Campaign. All rights reserved.": "© ২০২৬ রুচি ফুটবল ক্যাম্পেইন। সর্বস্বত্ব সংরক্ষিত।",
+  "The Campaign Journey": "ক্যাম্পেইন জার্নি",
+  "Your path to soccer glory and exclusive rewards. Learn how you can play and lead your team to the top.": "ফুটবল গৌরব আর এক্সক্লুসিভ রিওয়ার্ডের পথে আপনার যাত্রা। কীভাবে খেলবেন এবং দলকে শীর্ষে তুলবেন, জেনে নিন।",
+  "Campaign Reward Pools": "ক্যাম্পেইন রিওয়ার্ড পুল",
+  "Top 3 Scorers (Campaign Finalists)": "টপ ৩ স্কোরার (ক্যাম্পেইন ফাইনালিস্ট)",
+  "Exclusive Ruchi Golden Football, Customized Official Team Jersey with gold stitching, and VIP pass to the Football Event 2026 Finals.": "এক্সক্লুসিভ রুচি গোল্ডেন ফুটবল, গোল্ড স্টিচিংসহ কাস্টমাইজড অফিসিয়াল টিম জার্সি এবং ফুটবল ইভেন্ট ২০২৬ ফাইনালের ভিআইপি পাস।",
+  "Country Supporters Draw": "কান্ট্রি সাপোর্টার্স ড্র",
+  "When the tournament ends, 50 random registered supporters of the #1 ranked country on our Leaderboard will win official sports merch sets.": "টুর্নামেন্ট শেষে লিডারবোর্ডে #১ র‍্যাঙ্ক করা দেশের ৫০ জন র‍্যান্ডম রেজিস্টার্ড সাপোর্টার জিতবেন অফিসিয়াল স্পোর্টস মার্চ সেট।",
+  "Weekly Leaderboard Triumphs": "সাপ্তাহিক লিডারবোর্ড বিজয়",
+  "The highest scorer of each week receives a branded Ruchi soccer jersey and matching professional goalkeeper gloves.": "প্রতি সপ্তাহের সর্বোচ্চ স্কোরার পাবেন ব্র্যান্ডেড রুচি সকার জার্সি এবং ম্যাচিং প্রফেশনাল গোলকিপার গ্লাভস।",
+  "Register & Play Now ðŸ†": "এখনই রেজিস্টার করে খেলুন",
+  "Explore arcade ðŸŽ®": "আর্কেড দেখুন",
+  "Register & Play": "রেজিস্টার করুন ও খেলুন",
+  "Unlock access to the games, choose your country, and record your high scores.": "গেমে অ্যাক্সেস আনলক করুন, দেশ বাছাই করুন এবং আপনার হাই স্কোর রেকর্ড করুন।",
+  "Full Name": "পূর্ণ নাম",
+  "Phone Number": "ফোন নম্বর",
+  "Email Address": "ইমেইল ঠিকানা",
+  "Area / Location": "এলাকা / লোকেশন",
+  "Choose Your Jersey Number": "আপনার জার্সি নম্বর বাছাই করুন",
+  "Choose your team": "আপনার দল বাছাই করুন",
+  "Every point you earn will support this country in the standings.": "আপনার অর্জিত প্রতিটি পয়েন্ট স্ট্যান্ডিংসে এই দেশকে সাপোর্ট করবে।",
+  "Support": "সাপোর্ট",
+  "I accept the terms and conditions of Ruchi Football Fever 2026 campaign.": "আমি রুচি ফুটবল ফিভার ২০২৬ ক্যাম্পেইনের শর্তাবলি মেনে নিচ্ছি।",
+  "Complete Registration & Play": "রেজিস্ট্রেশন সম্পন্ন করে খেলুন",
+  "Jersey": "জার্সি",
+  "Edit Details âœï¸": "তথ্য এডিট করুন",
+  "Ruchi Photobooth": "রুচি ফটোবুথ",
+  "Ruchi Gallery": "রুচি গ্যালারি",
+  "Event Arcade": "ইভেন্ট আর্কেড",
+  "Challenge yourself in high-octane mini-game, rack up points, and support your nation's rank.": "রোমাঞ্চকর মিনি-গেমে নিজেকে চ্যালেঞ্জ করুন, পয়েন্ট তুলুন এবং আপনার দেশের র‍্যাঙ্কে সাপোর্ট দিন।",
+  "Back to Dashboard": "ড্যাশবোর্ডে ফিরুন",
+  "Action": "অ্যাকশন",
+  "Penalty Shootout Challenge": "পেনাল্টি শুটআউট চ্যালেঞ্জ",
+  "Step up to the penalty spot! Take on the goalkeeper, target the corners of the goal net, and fire shots past the defender within the 30-second time limit.": "পেনাল্টি স্পটে দাঁড়ান! গোলকিপারকে ফাঁকি দিন, গোল নেটের কর্নার টার্গেট করুন এবং ৩০ সেকেন্ডের মধ্যে শট নিন।",
+  "Time Limit: 30 seconds": "সময় সীমা: ৩০ সেকেন্ড",
+  "Each goal scores 100 points": "প্রতিটি গোলে ১০০ পয়েন্ট",
+  "Top corner goals score 150 points (Bonus!)": "টপ কর্নার গোলে ১৫০ পয়েন্ট (বোনাস!)",
+  "Goalkeeper saves block your streak": "গোলকিপারের সেভ আপনার স্ট্রিক থামাবে",
+  "Play Penalty Challenge âš½": "পেনাল্টি চ্যালেঞ্জ খেলুন",
+  "Ready to Shoot?": "শট নিতে প্রস্তুত?",
+  "Use your mouse/touch to aim and click on the goal openings. Beat the goalkeeper before time runs out!": "মাউস/টাচ দিয়ে লক্ষ্য করুন এবং গোলের খোলা জায়গায় ক্লিক করুন। সময় শেষ হওয়ার আগে গোলকিপারকে হারান!",
+  "Kick Off ðŸš€": "কিক অফ",
+  "Game Finished!": "গেম শেষ!",
+  "Your Score": "আপনার স্কোর",
+  "Country Boost": "দেশের বুস্ট",
+  "Play Again ðŸ”„": "আবার খেলুন",
+  "Standings ðŸ“Š": "স্ট্যান্ডিংস",
+  "AI Photo Booth ðŸ“¸": "এআই ফটো বুথ",
+  "Live Scoreboards": "লাইভ স্কোরবোর্ড",
+  "Watch individuals clash for top scorer glory, and see which nation leads the global charts.": "টপ স্কোরারের লড়াই দেখুন এবং কোন দেশ গ্লোবাল চার্টে এগিয়ে আছে তা জানুন।",
+  "Top 15 Scorers": "টপ ১৫ স্কোরার",
+  "Top Countries": "টপ দেশ",
+  "Rank": "র‍্যাঙ্ক",
+  "Player": "প্লেয়ার",
+  "Supporting Team": "সাপোর্টিং টিম",
+  "Total Score": "মোট স্কোর",
+  "Country": "দেশ",
+  "Combined Score & Progress": "সম্মিলিত স্কোর ও প্রগ্রেস",
+  "Supporters": "সাপোর্টার",
+  "Fans": "ফ্যান",
+  "Transform your look into a premium campaign poster. Put on your country colors, stand under stadium lights, and share the hype.": "আপনার লুককে প্রিমিয়াম ক্যাম্পেইন পোস্টারে রূপ দিন। দেশের রঙে স্টেডিয়াম লাইটের নিচে দাঁড়ান এবং হাইপ শেয়ার করুন।",
+  "Choose Photo Source": "ছবির সোর্স বাছাই করুন",
+  "Upload Image": "ছবি আপলোড করুন",
+  "Use Camera": "ক্যামেরা ব্যবহার করুন",
+  "Snap Photo ðŸ“¸": "ছবি তুলুন",
+  "Select Poster Template": "পোস্টার টেমপ্লেট বাছাই করুন",
+  "Stadium Champion": "স্টেডিয়াম চ্যাম্পিয়ন",
+  "Country Fan Poster": "কান্ট্রি ফ্যান পোস্টার",
+  "Football Jersey": "ফুটবল জার্সি",
+  "Trophy Celeb": "ট্রফি সেলিব্রেশন",
+  "Match Day Card": "ম্যাচ ডে কার্ড",
+  "Process & Render": "প্রসেস ও রেন্ডার",
+  "Generate AI Football Photo âœ¨": "এআই ফুটবল ছবি তৈরি করুন",
+  "Upload a photo or snap a picture and select a theme template to see your premium AI campaign poster generated here.": "একটি ছবি আপলোড করুন বা ছবি তুলুন, তারপর থিম টেমপ্লেট বাছাই করুন। আপনার প্রিমিয়াম এআই ক্যাম্পেইন পোস্টার এখানে দেখা যাবে।",
+  "Download Poster ðŸ’¾": "পোস্টার ডাউনলোড করুন",
+  "Add to Gallery ðŸ“£": "গ্যালারিতে যোগ করুন",
+  "Social Fan Gallery": "সোশ্যাল ফ্যান গ্যালারি",
+  "Check out campaign cards created by supporters worldwide. Filter by country and like your favorites!": "বিশ্বজুড়ে সাপোর্টারদের তৈরি ক্যাম্পেইন কার্ড দেখুন। দেশ অনুযায়ী ফিল্টার করুন এবং পছন্দেরগুলোতে লাইক দিন!",
+  "All Countries": "সব দেশ",
+  "Arena Locked": "আর্কেড লকড",
+  "Access to the Event Arcade mini-games is restricted to registered campaign players.": "ইভেন্ট আর্কেড মিনি-গেমে অ্যাক্সেস শুধু রেজিস্টার্ড ক্যাম্পেইন প্লেয়ারদের জন্য।",
+  "Save your scores to the live leaderboard": "আপনার স্কোর লাইভ লিডারবোর্ডে সেভ করুন",
+  "Represent your country in national standings": "ন্যাশনাল স্ট্যান্ডিংসে আপনার দেশকে প্রতিনিধিত্ব করুন",
+  "Enter weekly draws for official merchandise": "অফিসিয়াল মার্চেন্ডাইজের সাপ্তাহিক ড্রতে অংশ নিন",
+  "Register Now & Unlock âš¡": "রেজিস্টার করে আনলক করুন",
+  "Photo Booth Locked": "ফটো বুথ লকড",
+  "Access to the AI Fan Photo Booth is restricted to registered campaign players.": "এআই ফ্যান ফটো বুথে অ্যাক্সেস শুধু রেজিস্টার্ড ক্যাম্পেইন প্লেয়ারদের জন্য।",
+  "Generate premium customized country team jersey posters": "প্রিমিয়াম কাস্টমাইজড কান্ট্রি টিম জার্সি পোস্টার তৈরি করুন",
+  "Post your cards live to the shared Social Fan Gallery": "শেয়ারড সোশ্যাল ফ্যান গ্যালারিতে আপনার কার্ড পোস্ট করুন",
+  "Download HD posters with custom jersey numbers": "কাস্টম জার্সি নম্বরসহ এইচডি পোস্টার ডাউনলোড করুন",
+  "Enter your full name": "আপনার পূর্ণ নাম লিখুন",
+  "Enter your phone number": "আপনার ফোন নম্বর লিখুন",
+  "Enter your email": "আপনার ইমেইল লিখুন",
+  "e.g. Dhaka, Bangladesh": "যেমন: ঢাকা, বাংলাদেশ",
+  "Enter your favorite jersey number (1-99)": "আপনার পছন্দের জার্সি নম্বর লিখুন (১-৯৯)"
+};
+
+function translate(value) {
+  if (currentLanguage !== "bn") return value;
+  return bnText[value] || value;
+}
+
+window.t = translate;
+window.getAppLanguage = () => currentLanguage;
+
+function normalizeText(value) {
+  return String(value || "").replace(/\s+/g, " ").trim();
+}
+
+function initLanguageSupport() {
+  document.documentElement.lang = currentLanguage === "bn" ? "bn" : "en";
+  document.body.classList.toggle("lang-bn", currentLanguage === "bn");
+  injectLanguageToggle();
+  applyPageTranslations();
+}
+
+function injectLanguageToggle() {
+  const navbar = document.getElementById("navbar");
+  const cta = navbar ? navbar.querySelector(".nav-cta") : null;
+  if (!navbar || !cta || navbar.querySelector(".language-toggle")) return;
+
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "language-toggle";
+  toggle.setAttribute("aria-label", "Switch language");
+  toggle.addEventListener("click", () => {
+    currentLanguage = currentLanguage === "bn" ? "en" : "bn";
+    localStorage.setItem(languageStorageKey, currentLanguage);
+    window.location.reload();
+  });
+  navbar.insertBefore(toggle, cta);
+  syncLanguageToggle();
+}
+
+function syncLanguageToggle() {
+  const toggle = document.querySelector(".language-toggle");
+  if (!toggle) return;
+  toggle.textContent = currentLanguage === "bn" ? "EN" : "বাংলা";
+  toggle.setAttribute("aria-pressed", currentLanguage === "bn" ? "true" : "false");
+}
+
+function applyPageTranslations() {
+  if (currentLanguage !== "bn") return;
+
+  const textNodes = [];
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (!parent || ["SCRIPT", "STYLE", "CANVAS", "SVG"].includes(parent.tagName)) {
+        return NodeFilter.FILTER_REJECT;
+      }
+      return normalizeText(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+  textNodes.forEach(node => {
+    const original = normalizeText(node.nodeValue);
+    const translated = bnText[original];
+    if (translated) node.nodeValue = node.nodeValue.replace(original, translated);
+  });
+
+  document.querySelectorAll("input[placeholder], textarea[placeholder]").forEach(input => {
+    const placeholder = input.getAttribute("placeholder");
+    if (bnText[placeholder]) input.setAttribute("placeholder", bnText[placeholder]);
+  });
+
+  const title = normalizeText(document.title);
+  if (bnText[title]) document.title = bnText[title];
+}
 
 // --- Initialization ---
 document.addEventListener("DOMContentLoaded", () => {
   loadStateFromLocalStorage();
+  initLanguageSupport();
   initCountdown();
   renderLeaderboards();
   injectDesktopNav();
@@ -94,6 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
   syncSportsTicker();
   checkRouteGuards();
   injectMobileBottomNav();
+  applyPageTranslations();
 });
 
 // --- Sync Navbar Profile Button ---
@@ -102,11 +326,11 @@ function syncNavbarProfileButton() {
   if (ctaContainer) {
     if (state.user.registered) {
       ctaContainer.innerHTML = `
-        <a href="registration.html" class="btn btn-secondary" style="padding: 10px 20px; font-size: 0.85rem;">Dashboard</a>
+        <a href="registration.html" class="btn btn-secondary" style="padding: 10px 20px; font-size: 0.85rem;">${translate("Dashboard")}</a>
       `;
     } else {
       ctaContainer.innerHTML = `
-        <a href="registration.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">Register Now</a>
+        <a href="registration.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">${translate("Register Now")}</a>
       `;
     }
   }
@@ -117,9 +341,9 @@ function syncNavbarProfileButton() {
     const regBtn = heroActions.querySelector("a[href='registration.html']");
     if (regBtn) {
       if (state.user.registered) {
-        regBtn.innerText = "Dashboard ⚡";
+        regBtn.innerText = translate("Dashboard");
       } else {
-        regBtn.innerText = "Register Now ⚡";
+        regBtn.innerText = translate("Register Now");
       }
     }
   }
@@ -131,12 +355,12 @@ function injectDesktopNav() {
 
   const currentFile = getCurrentFileName();
   const links = [
-    { href: "index.html", label: "Home" },
-    { href: "campaign.html", label: "Campaign" },
-    { href: "registration.html", label: state.user.registered ? "Dashboard" : "Register" },
-    { href: "games.html", label: "Games", locked: !state.user.registered },
-    { href: "leaderboard.html", label: "Leaderboard" },
-    { href: "photobooth.html", label: "Photo Booth", locked: !state.user.registered }
+    { href: "index.html", label: translate("Home") },
+    { href: "campaign.html", label: translate("Campaign") },
+    { href: "registration.html", label: state.user.registered ? translate("Dashboard") : translate("Register") },
+    { href: "games.html", label: translate("Games"), locked: !state.user.registered },
+    { href: "leaderboard.html", label: translate("Leaderboard") },
+    { href: "photobooth.html", label: translate("Photo Booth"), locked: !state.user.registered }
   ];
 
   const navList = document.createElement("ul");
@@ -145,7 +369,7 @@ function injectDesktopNav() {
   navList.innerHTML = links.map(link => {
     const active = currentFile === link.href ? "active" : "";
     const ariaCurrent = active ? ` aria-current="page"` : "";
-    const lock = link.locked ? `<span class="nav-lock" aria-label="Registration required">Locked</span>` : "";
+    const lock = link.locked ? `<span class="nav-lock" aria-label="Registration required">${translate("Locked")}</span>` : "";
     return `<li><a href="${link.href}" class="${active}"${ariaCurrent}>${link.label}${lock}</a></li>`;
   }).join("");
 
@@ -172,7 +396,7 @@ function showToast(message, type = "info") {
   toast.className = `app-toast toast-${type}`;
   toast.setAttribute("role", "status");
   toast.setAttribute("aria-live", "polite");
-  toast.textContent = message;
+  toast.textContent = translate(message);
   document.body.appendChild(toast);
 
   window.setTimeout(() => toast.classList.add("show"), 10);
@@ -310,7 +534,7 @@ window.selectCountry = function(element) {
   // Set hidden input
   const hiddenInput = document.getElementById("selected-country-val");
   if (hiddenInput) hiddenInput.value = countryName;
-  showToast(`${countryName} selected as your team.`, "success");
+  showToast(currentLanguage === "bn" ? `${countryName} আপনার দল হিসেবে বাছাই করা হয়েছে।` : `${countryName} selected as your team.`, "success");
 };
 
 // Avatar upload removed, Jersey Number field added instead
@@ -326,14 +550,16 @@ window.handleRegistration = function(event) {
   const country = document.getElementById("selected-country-val").value;
   
   if (!country) {
-    showToast("Please select a supporting country first.", "error");
+    showToast(currentLanguage === "bn" ? "প্রথমে একটি সাপোর্টিং দেশ বাছাই করুন।" : "Please select a supporting country first.", "error");
     return;
   }
 
   if (!name || !phone || !email || !location) {
-    showToast("Please complete all registration fields.", "error");
+    showToast(currentLanguage === "bn" ? "রেজিস্ট্রেশনের সব ঘর পূরণ করুন।" : "Please complete all registration fields.", "error");
     return;
   }
+  
+  const wasAlreadyRegistered = state.user.registered;
   
   state.user.name = name;
   state.user.phone = phone;
@@ -349,18 +575,86 @@ window.handleRegistration = function(event) {
   syncNavbarProfileButton();
   refreshDesktopNav();
   syncSportsTicker();
-  showToast("Registration saved. Your dashboard is ready.", "success");
+  
+  if (wasAlreadyRegistered) {
+    showToast(currentLanguage === "bn" ? "প্রোফাইলের তথ্য সফলভাবে আপডেট হয়েছে।" : "Profile details updated successfully.", "success");
+  } else {
+    showToast(currentLanguage === "bn" ? "রেজিস্ট্রেশন সেভ হয়েছে। আপনার ড্যাশবোর্ড প্রস্তুত।" : "Registration saved. Your dashboard is ready.", "success");
+  }
   
   // Remove locks dynamically
   const bottomNav = document.querySelector(".mobile-bottom-nav");
   if (bottomNav) bottomNav.remove();
   injectMobileBottomNav();
   
-
-  
   // Smooth scroll
   const successCard = document.getElementById("registration-success");
   if (successCard) successCard.scrollIntoView({ behavior: 'smooth' });
+};
+
+window.editRegistrationDetails = function() {
+  const successCard = document.getElementById("registration-success");
+  const regCard = document.getElementById("registration-card");
+  if (!successCard || !regCard) return;
+  
+  successCard.style.display = "none";
+  regCard.style.display = "block";
+  
+  // Show and update subpage-header
+  const subpageHeader = document.querySelector(".subpage-header");
+  if (subpageHeader) {
+    subpageHeader.style.display = "block";
+    const headerTitle = document.getElementById("reg-header-title");
+    const headerDesc = document.getElementById("reg-header-desc");
+    if (headerTitle) headerTitle.innerText = currentLanguage === "bn" ? "আপনার প্রোফাইল এডিট করুন" : "Edit Your Profile";
+    if (headerDesc) headerDesc.innerText = currentLanguage === "bn" ? "আপনার তথ্য, পছন্দের জার্সি নম্বর এবং সাপোর্টিং টিম আপডেট করুন।" : "Update your details, favorite jersey number, and supporting team.";
+  }
+  
+  const regSection = document.getElementById("registration");
+  if (regSection) {
+    regSection.style.paddingTop = "50px";
+  }
+  
+  // Pre-fill form fields
+  document.getElementById("reg-name").value = state.user.name || "";
+  document.getElementById("reg-phone").value = state.user.phone || "";
+  document.getElementById("reg-email").value = state.user.email || "";
+  document.getElementById("reg-location").value = state.user.location || "";
+  document.getElementById("reg-jersey").value = state.user.jerseyNumber || 10;
+  
+  const hiddenCountry = document.getElementById("selected-country-val");
+  if (hiddenCountry) {
+    hiddenCountry.value = state.user.supportingCountry || "";
+  }
+  
+  // Highlight the selected country card in the UI
+  const cards = document.querySelectorAll(".country-card");
+  cards.forEach(c => {
+    if (c.getAttribute("data-country") === state.user.supportingCountry) {
+      c.classList.add("selected");
+    } else {
+      c.classList.remove("selected");
+    }
+  });
+  
+  // Check the terms checkbox
+  const termsCheckbox = document.getElementById("reg-terms");
+  if (termsCheckbox) {
+    termsCheckbox.checked = true;
+  }
+  
+  // Update the submit button text
+  const submitBtn = document.getElementById("reg-submit-btn");
+  if (submitBtn) {
+    submitBtn.innerText = currentLanguage === "bn" ? "তথ্য সেভ করে ফিরুন" : "Save Details & Return";
+  }
+  
+  // Smooth scroll to header
+  if (subpageHeader) {
+    subpageHeader.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    regCard.scrollIntoView({ behavior: 'smooth' });
+  }
 };
 
 function showRegistrationSuccess() {
@@ -388,6 +682,12 @@ function showRegistrationSuccess() {
   
   const cardJersey = document.getElementById("player-card-jersey");
   if (cardJersey) cardJersey.innerText = `#${state.user.jerseyNumber}`;
+  
+  // Reset form submit button text
+  const submitBtn = document.getElementById("reg-submit-btn");
+  if (submitBtn) {
+    submitBtn.innerText = translate("Complete Registration & Play");
+  }
 }
 
 
@@ -583,7 +883,7 @@ function renderLeaderboardPanel(type, data) {
             </div>
           </div>
         </td>
-        <td style="text-align: right; color: var(--text-gray); font-weight: 700;">${item.supporters} Fans</td>
+        <td style="text-align: right; color: var(--text-gray); font-weight: 700;">${item.supporters} ${translate("Fans")}</td>
       `;
       tbody.appendChild(row);
     });
@@ -628,7 +928,7 @@ window.onGameFinished = function(gameKey, score) {
   const resUserScore = document.getElementById("result-user-score");
   const resCountryBoost = document.getElementById("result-country-boost");
   
-  if (resTitle) resTitle.innerText = "Penalty Challenge Completed!";
+  if (resTitle) resTitle.innerText = currentLanguage === "bn" ? "পেনাল্টি চ্যালেঞ্জ সম্পন্ন!" : "Penalty Challenge Completed!";
   if (resUserScore) resUserScore.innerText = score;
   if (resCountryBoost) resCountryBoost.innerText = `+${boost}`;
   
@@ -637,13 +937,13 @@ window.onGameFinished = function(gameKey, score) {
     if (state.user.registered) {
       const userRank = state.individualLeaderboard.findIndex(p => p.isUser) + 1;
       resNotice.innerHTML = `
-        You are currently ranked <span style='color: var(--primary-neon);'>#${userRank}</span> globally!<br>
-        Total Score: ${state.user.personalBest.penalty} pts
+        ${currentLanguage === "bn" ? "আপনার বর্তমান গ্লোবাল র‍্যাঙ্ক" : "You are currently ranked"} <span style='color: var(--primary-neon);'>#${userRank}</span>${currentLanguage === "bn" ? "!" : " globally!"}<br>
+        ${currentLanguage === "bn" ? "মোট স্কোর" : "Total Score"}: ${state.user.personalBest.penalty} ${currentLanguage === "bn" ? "পয়েন্ট" : "pts"}
       `;
     } else {
       resNotice.innerHTML = `
-        <span style='color: var(--accent-red);'>Score not saved to leaderboard!</span><br>
-        <a href='registration.html' style='color: var(--primary-neon); text-decoration: underline;'>Register here</a> to submit scores for your country!
+        <span style='color: var(--accent-red);'>${currentLanguage === "bn" ? "স্কোর লিডারবোর্ডে সেভ হয়নি!" : "Score not saved to leaderboard!"}</span><br>
+        <a href='registration.html' style='color: var(--primary-neon); text-decoration: underline;'>${currentLanguage === "bn" ? "এখানে রেজিস্টার করুন" : "Register here"}</a> ${currentLanguage === "bn" ? "আপনার দেশের জন্য স্কোর জমা দিতে।" : "to submit scores for your country!"}
       `;
     }
   }
@@ -782,15 +1082,17 @@ function syncSportsTicker() {
     // Clear any previous custom elements
     track.querySelectorAll(".user-ticker-item").forEach(el => el.remove());
     
-    const playerUpdateText = `👤 PLAYER STATS: ${state.user.name.toUpperCase()} (JERSEY #${state.user.jerseyNumber}) - TEAM ${state.user.supportingCountry.toUpperCase()} ${flag} - SCORE: ${userBest} PTS`;
+    const playerUpdateText = currentLanguage === "bn"
+      ? `👤 প্লেয়ার স্ট্যাটস: ${state.user.name.toUpperCase()} (জার্সি #${state.user.jerseyNumber}) - টিম ${state.user.supportingCountry.toUpperCase()} ${flag} - স্কোর: ${userBest} পয়েন্ট`
+      : `👤 PLAYER STATS: ${state.user.name.toUpperCase()} (JERSEY #${state.user.jerseyNumber}) - TEAM ${state.user.supportingCountry.toUpperCase()} ${flag} - SCORE: ${userBest} PTS`;
     
     const userMsg1 = document.createElement("div");
     userMsg1.className = "ticker-item user-ticker-item";
-    userMsg1.innerHTML = `<span class="ticker-highlight" style="background: var(--accent-red); color: #fff;">MY STATS</span> ${playerUpdateText} <span class="ticker-divider">⚡</span>`;
+    userMsg1.innerHTML = `<span class="ticker-highlight" style="background: var(--accent-red); color: #fff;">${currentLanguage === "bn" ? "আমার স্ট্যাটস" : "MY STATS"}</span> ${playerUpdateText} <span class="ticker-divider">⚡</span>`;
     
     const userMsg2 = document.createElement("div");
     userMsg2.className = "ticker-item user-ticker-item";
-    userMsg2.innerHTML = `<span class="ticker-highlight" style="background: var(--accent-red); color: #fff;">MY STATS</span> ${playerUpdateText} <span class="ticker-divider">⚡</span>`;
+    userMsg2.innerHTML = `<span class="ticker-highlight" style="background: var(--accent-red); color: #fff;">${currentLanguage === "bn" ? "আমার স্ট্যাটস" : "MY STATS"}</span> ${playerUpdateText} <span class="ticker-divider">⚡</span>`;
     
     // Refresh items list
     const freshItems = Array.from(track.querySelectorAll(".ticker-item"));
@@ -815,14 +1117,14 @@ function checkRouteGuards() {
         <div class="app-lock-container">
           <div class="app-lock-card glass-card">
             <div class="lock-icon-glow">🔒</div>
-            <h2>Arena Locked</h2>
-            <p>Access to the Event Arcade mini-games is restricted to registered campaign players.</p>
+            <h2>${translate("Arena Locked")}</h2>
+            <p>${translate("Access to the Event Arcade mini-games is restricted to registered campaign players.")}</p>
             <div class="lock-benefits">
-              <div class="benefit-item">⚡ Save your scores to the live leaderboard</div>
-              <div class="benefit-item">🌍 Represent your country in national standings</div>
-              <div class="benefit-item">🎁 Enter weekly draws for official merchandise</div>
+              <div class="benefit-item">⚡ ${translate("Save your scores to the live leaderboard")}</div>
+              <div class="benefit-item">🌍 ${translate("Represent your country in national standings")}</div>
+              <div class="benefit-item">🎁 ${translate("Enter weekly draws for official merchandise")}</div>
             </div>
-            <a href="registration.html" class="btn btn-primary" style="width: 100%;">Register Now & Unlock ⚡</a>
+            <a href="registration.html" class="btn btn-primary" style="width: 100%;">${currentLanguage === "bn" ? "রেজিস্টার করে আনলক করুন" : "Register Now & Unlock"}</a>
           </div>
         </div>
       `;
@@ -838,14 +1140,14 @@ function checkRouteGuards() {
         <div class="app-lock-container">
           <div class="app-lock-card glass-card">
             <div class="lock-icon-glow">🔒</div>
-            <h2>Photo Booth Locked</h2>
-            <p>Access to the AI Fan Photo Booth is restricted to registered campaign players.</p>
+            <h2>${translate("Photo Booth Locked")}</h2>
+            <p>${translate("Access to the AI Fan Photo Booth is restricted to registered campaign players.")}</p>
             <div class="lock-benefits">
-              <div class="benefit-item">📸 Generate premium customized country team jersey posters</div>
-              <div class="benefit-item">🌍 Post your cards live to the shared Social Fan Gallery</div>
-              <div class="benefit-item">💾 Download HD posters with custom jersey numbers</div>
+              <div class="benefit-item">📸 ${translate("Generate premium customized country team jersey posters")}</div>
+              <div class="benefit-item">🌍 ${translate("Post your cards live to the shared Social Fan Gallery")}</div>
+              <div class="benefit-item">💾 ${translate("Download HD posters with custom jersey numbers")}</div>
             </div>
-            <a href="registration.html" class="btn btn-primary" style="width: 100%;">Register Now & Unlock ⚡</a>
+            <a href="registration.html" class="btn btn-primary" style="width: 100%;">${currentLanguage === "bn" ? "রেজিস্টার করে আনলক করুন" : "Register Now & Unlock"}</a>
           </div>
         </div>
       `;
@@ -876,23 +1178,23 @@ function injectMobileBottomNav() {
   nav.innerHTML = `
     <a href="index.html" class="bottom-nav-tab ${fileName === 'index.html' ? 'active' : ''}">
       <span class="tab-icon">🏠</span>
-      <span class="tab-label">Home</span>
+      <span class="tab-label">${translate("Home")}</span>
     </a>
     <a href="registration.html" class="bottom-nav-tab ${fileName === 'registration.html' ? 'active' : ''}">
       <span class="tab-icon">👤</span>
-      <span class="tab-label">${state.user.registered ? 'Profile' : 'Register'}</span>
+      <span class="tab-label">${state.user.registered ? translate("Profile") : translate("Register")}</span>
     </a>
     <a href="games.html" class="bottom-nav-tab ${fileName === 'games.html' ? 'active' : ''}">
       <span class="tab-icon" style="position: relative;">🎮${gamesLock}</span>
-      <span class="tab-label">Games</span>
+      <span class="tab-label">${translate("Games")}</span>
     </a>
     <a href="leaderboard.html" class="bottom-nav-tab ${fileName === 'leaderboard.html' ? 'active' : ''}">
       <span class="tab-icon">📊</span>
-      <span class="tab-label">Standings</span>
+      <span class="tab-label">${translate("Standings")}</span>
     </a>
     <a href="photobooth.html" class="bottom-nav-tab ${fileName === 'photobooth.html' ? 'active' : ''}">
       <span class="tab-icon" style="position: relative;">📸${boothLock}</span>
-      <span class="tab-label">Booth</span>
+      <span class="tab-label">${translate("Booth")}</span>
     </a>
   `;
   

@@ -3,246 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ruchi Football Fever 2026 - Join the Ultimate Campaign</title>
-  <meta name="description" content="Register for Ruchi Football Event 2026. Choose your supporting country, play exciting mini-games, climb the leaderboard, and create AI football posters.">
+  <title>Ruchi Football 2026</title>
+  <meta name="description" content="Register, play the penalty game, check the leaderboard, and create a Ruchi football fan poster.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-  <!-- Premium Particle Canvas -->
-  <canvas id="particle-canvas"></canvas>
-
-  <!-- ==========================================
-       NAVIGATION BAR
-       ========================================== -->
   <nav class="navbar" id="navbar">
-    <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
-      <img src="assets/images/ruchi_logo.jpg" alt="Ruchi Logo" style="height: 36px; width: auto; border-radius: 4px;">
+    <a href="index.html" class="logo">
+      <img src="assets/images/ruchi_logo.jpg" alt="Ruchi Logo">
       <span>RUCHI<span>2026</span></span>
     </a>
-
-    
     <div class="nav-cta">
-      <!-- Profile dynamically synced by app.js -->
-      <a href="registration.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">Register Now</a>
+      <a href="registration.html" class="btn btn-primary nav-main-btn">Register</a>
     </div>
   </nav>
 
-  <!-- ==========================================
-       HERO SECTION
-       ========================================== -->
-  <header class="hero" id="home">
+  <header class="hero simple-hero" id="home">
     <div class="hero-parallax-bg" style="background-image: url('assets/images/stadium_hero.png');"></div>
     <div class="hero-content">
       <div class="badge-tag badge-logo">
-        <img src="assets/images/ruchi-mnemonic.png" alt="Ruchi Chanachur Official Mix World Cup 2026">
+        <img src="assets/images/ruchi-mnemonic.png" alt="Ruchi Chanachur Football 2026">
       </div>
-      <h1>Score for Your Nation<br><span>Lead the Board</span></h1>
-      <p>Register, support your favorite country, play exciting games, earn points, and lead your team to the top of the global standings.</p>
-      
+      <h1>Ruchi Football 2026</h1>
+      <p>Join the campaign, support your team, play the penalty challenge, and climb the leaderboard.</p>
       <div class="hero-actions">
-        <a href="registration.html" class="btn btn-primary">Register Now ⚡</a>
-        <a href="games.html" class="btn btn-secondary">Explore Games 🎮</a>
-      </div>
-      
-      <!-- Countdown Timer -->
-      <div class="countdown-container">
-        <div class="countdown-box">
-          <div class="countdown-num" id="days">30</div>
-          <div class="countdown-label">Days</div>
-        </div>
-        <div class="countdown-divider">:</div>
-        <div class="countdown-box">
-          <div class="countdown-num" id="hours">12</div>
-          <div class="countdown-label">Hrs</div>
-        </div>
-        <div class="countdown-divider">:</div>
-        <div class="countdown-box">
-          <div class="countdown-num" id="minutes">45</div>
-          <div class="countdown-label">Min</div>
-        </div>
-        <div class="countdown-divider">:</div>
-        <div class="countdown-box">
-          <div class="countdown-num" id="seconds">00</div>
-          <div class="countdown-label">Sec</div>
-        </div>
+        <a href="registration.html" class="btn btn-primary">Start Here</a>
+        <a href="games.html" class="btn btn-secondary">Play Game</a>
       </div>
     </div>
   </header>
 
-  <!-- ==========================================
-       SPORTS TICKER MARQUEE
-       ========================================== -->
-  <div class="sports-ticker-container">
-    <div class="sports-ticker-track" id="ticker-track">
-      <!-- Group 1 -->
-      <div class="ticker-item"><span class="ticker-highlight">NEWS</span> RUCHI FOOTBALL FEVER 2026 CAMPAIGN IS LIVE! <span class="ticker-divider">⚽</span></div>
-      <div class="ticker-item"><span class="ticker-highlight">LEADERBOARD</span> CHOOSE YOUR TEAM AND KICK OFF NOW! <span class="ticker-divider">⚡</span></div>
-      <div class="ticker-item"><span class="ticker-highlight">REWARDS</span> TOP SCORERS WIN EXCLUSIVE GOLDEN SOCCER BALLS & OFFICIAL JERSEYS! <span class="ticker-divider">🏆</span></div>
-      <div class="ticker-item"><span class="ticker-highlight">AI BOOTH</span> GENERATE YOUR CUSTOM FAN POSTER AND SHARE! <span class="ticker-divider">📸</span></div>
-      <!-- Group 2 (Repeated for seamless loop) -->
-      <div class="ticker-item"><span class="ticker-highlight">NEWS</span> RUCHI FOOTBALL FEVER 2026 CAMPAIGN IS LIVE! <span class="ticker-divider">⚽</span></div>
-      <div class="ticker-item"><span class="ticker-highlight">LEADERBOARD</span> CHOOSE YOUR TEAM AND KICK OFF NOW! <span class="ticker-divider">⚡</span></div>
-      <div class="ticker-item"><span class="ticker-highlight">REWARDS</span> TOP SCORERS WIN EXCLUSIVE GOLDEN SOCCER BALLS & OFFICIAL JERSEYS! <span class="ticker-divider">🏆</span></div>
-      <div class="ticker-item"><span class="ticker-highlight">AI BOOTH</span> GENERATE YOUR CUSTOM FAN POSTER AND SHARE! <span class="ticker-divider">📸</span></div>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       CAMPAIGN OVERVIEW SECTION (HIGHLIGHTS)
-       ========================================== -->
-  <section id="campaign" class="campaign-overview reveal-item">
+  <section id="campaign" class="campaign-overview reveal-item simple-section">
     <div class="section-title">
-      <h2>Campaign Journey</h2>
-      <p>Follow these simple steps to play, support your team, and win awesome sports rewards.</p>
+      <h2>How It Works</h2>
+      <p>Everything is built around four simple actions.</p>
     </div>
-    
     <div class="overview-flow">
       <div class="flow-step reveal-item reveal-stagger-1">
-        <span class="step-num">01</span>
-        <div class="step-icon">📋</div>
+        <span class="step-num">1</span>
+        <div class="step-icon">1</div>
         <h3>Register</h3>
-        <p>Fill out your details to activate your player card.</p>
+        <p>Add your details and choose a team.</p>
       </div>
       <div class="flow-step reveal-item reveal-stagger-2">
-        <span class="step-num">02</span>
-        <div class="step-icon">🌍</div>
-        <h3>Select Country</h3>
-        <p>Support a World Cup 2026 team visually.</p>
+        <span class="step-num">2</span>
+        <div class="step-icon">2</div>
+        <h3>Play</h3>
+        <p>Score as many goals as you can.</p>
       </div>
       <div class="flow-step reveal-item reveal-stagger-3">
-        <span class="step-num">03</span>
-        <div class="step-icon">🎮</div>
-        <h3>Play Games</h3>
-        <p>Play the Penalty Shootout Challenge.</p>
+        <span class="step-num">3</span>
+        <div class="step-icon">3</div>
+        <h3>Rank</h3>
+        <p>Check your score and country rank.</p>
       </div>
       <div class="flow-step reveal-item reveal-stagger-4">
-        <span class="step-num">04</span>
-        <div class="step-icon">⚡</div>
-        <h3>Earn Points</h3>
-        <p>Score goals and gather coins to stack up points.</p>
-      </div>
-      <div class="flow-step reveal-item reveal-stagger-5">
-        <span class="step-num">05</span>
-        <div class="step-icon">📊</div>
-        <h3>Leaderboards</h3>
-        <p>Climb individual ranks and push your team higher.</p>
-      </div>
-      <div class="flow-step reveal-item reveal-stagger-6">
-        <span class="step-num">06</span>
-        <div class="step-icon">📸</div>
-        <h3>AI Photo Booth</h3>
-        <p>Generate styled campaign cards and share them.</p>
-      </div>
-      <div class="flow-step reveal-item reveal-stagger-7">
-        <span class="step-num">07</span>
-        <div class="step-icon">🏆</div>
-        <h3>Win Rewards</h3>
-        <p>Top scorers score real Ruchi merchandise!</p>
+        <span class="step-num">4</span>
+        <div class="step-icon">4</div>
+        <h3>Create</h3>
+        <p>Make a football fan poster.</p>
       </div>
     </div>
-    
-    <div style="text-align: center; margin-top: 50px;" class="reveal-item">
-      <a href="campaign.html" class="btn btn-primary">Learn More & View Rewards 🏆</a>
+    <div class="simple-actions reveal-item">
+      <a href="campaign.html" class="btn btn-secondary">View Rewards</a>
     </div>
   </section>
 
-  <!-- ==========================================
-       FAQ SECTION
-       ========================================== -->
-  <section id="faq" class="faq-section reveal-item" style="border-top: 1px solid var(--border-glass); padding-top: 80px;">
-    <div class="section-title">
-      <h2>Frequently Asked Questions</h2>
-      <p>Got questions about the Ruchi Campaign? Here is everything you need to know.</p>
-    </div>
-    
-    <div class="faq-container">
-      <div class="faq-item reveal-item reveal-stagger-1">
-        <div class="faq-header" onclick="toggleFaq(this)">
-          <h3>How do I register?</h3>
-          <span class="faq-toggle-icon">+</span>
-        </div>
-        <div class="faq-body">
-          <div class="faq-content">
-            Registration is simple. Head over to the <a href="registration.html" style="color: var(--primary-neon); text-decoration: underline;">Registration Page</a>, enter your Name, Phone, Email, and Area. Upload a profile image, choose the country you support, accept the Terms and submit the form. Once registered, your high scores in the games will be recorded on the leaderboard!
-          </div>
-        </div>
-      </div>
-      
-      <div class="faq-item reveal-item reveal-stagger-2">
-        <div class="faq-header" onclick="toggleFaq(this)">
-          <h3>Can I change my supporting country?</h3>
-          <span class="faq-toggle-icon">+</span>
-        </div>
-        <div class="faq-body">
-          <div class="faq-content">
-            Yes. You can edit your country choice by returning to the <a href="registration.html" style="color: var(--primary-neon); text-decoration: underline;">Registration Page</a> (which will show your success card if registered), clicking "Edit Details", selecting another country, and updating. Any new scores you record will support your new country.
-          </div>
-        </div>
-      </div>
-      
-      <div class="faq-item reveal-item reveal-stagger-3">
-        <div class="faq-header" onclick="toggleFaq(this)">
-          <h3>How are scores calculated?</h3>
-          <span class="faq-toggle-icon">+</span>
-        </div>
-        <div class="faq-body">
-          <div class="faq-content">
-            Your points are earned in the Penalty Shootout challenge:
-            <ul>
-              <li><strong>Penalty Shootout:</strong> Scoring regular goals adds 100 points. Scoring in the top corner targets adds 150 points. Saves by the goalie block your shot streak.</li>
-            </ul>
-            Your Personal Best score forms your Individual Leaderboard score.
-          </div>
-        </div>
-      </div>
-      
-      <div class="faq-item reveal-item reveal-stagger-4">
-        <div class="faq-header" onclick="toggleFaq(this)">
-          <h3>How many attempts can I make?</h3>
-          <span class="faq-toggle-icon">+</span>
-        </div>
-        <div class="faq-body">
-          <div class="faq-content">
-            You can play the challenge as many times as you like! There are no limits to the number of attempts. Keep playing to beat your personal best and send your supporting team flying up the standings.
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================
-       FOOTER
-       ========================================== -->
-  <footer class="footer">
+  <footer class="footer simple-footer">
     <div class="footer-grid">
       <div class="footer-col">
-        <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
-          <img src="assets/images/ruchi_logo.jpg" alt="Ruchi Logo" style="height: 42px; width: auto; border-radius: 4px;">
+        <a href="index.html" class="logo">
+          <img src="assets/images/ruchi_logo.jpg" alt="Ruchi Logo">
           <span>RUCHI<span>2026</span></span>
         </a>
-        <p>Bringing fans closer to the action of the FIFA World Cup 2026. Register, compete, play, and win with Ruchi Football Fever.</p>
-        <div class="footer-socials">
-          <a href="#" class="social-icon">F</a>
-          <a href="#" class="social-icon">X</a>
-          <a href="#" class="social-icon">I</a>
-          <a href="#" class="social-icon">Y</a>
-        </div>
+        <p>Register, play, rank, and create with Ruchi Football 2026.</p>
       </div>
-
-      
       <div class="footer-col">
-        <h4>Contact Information</h4>
-        <p>Email: event2026@ruchi-football.com<br>Phone: +880 9612-RUCHI<br>Address: Level 8, Sports Tower, Dhaka</p>
+        <h4>Contact</h4>
+        <p>Email: event2026@ruchi-football.com<br>Phone: +880 9612-RUCHI</p>
       </div>
     </div>
-    
     <div class="footer-bottom">
       <p>&copy; 2026 Ruchi Football Campaign. All rights reserved.</p>
     </div>
   </footer>
 
-  <!-- Scripts -->
   <script src="app.js"></script>
 </body>
 </html>

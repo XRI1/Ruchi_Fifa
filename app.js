@@ -901,7 +901,7 @@ function initNavbarScroll() {
     } else {
       navbar.classList.remove("scrolled");
     }
-  });
+  }, { passive: true });
 }
 
 
@@ -1016,10 +1016,12 @@ window.filterGallery = function(country) {
 
 // --- High-Performance Parallax ---
 function initParallax() {
+  // Skip parallax on mobile — it causes scroll jank on weaker GPUs
+  if (window.innerWidth <= 768) return;
+
   const backgrounds = document.querySelectorAll(".hero-parallax-bg");
   if (backgrounds.length === 0) return;
   
-  let lastScrollY = window.scrollY;
   let ticking = false;
   
   const updatePosition = () => {
@@ -1036,12 +1038,11 @@ function initParallax() {
   };
   
   window.addEventListener("scroll", () => {
-    lastScrollY = window.scrollY;
     if (!ticking) {
       window.requestAnimationFrame(updatePosition);
       ticking = true;
     }
-  });
+  }, { passive: true });
   
   // Initial frame
   updatePosition();
@@ -1216,6 +1217,123 @@ function updateDesktopNavLockBadges() {
       if (!link.innerHTML.includes("🔒")) {
         link.innerHTML = `AI Photo Booth <span style="font-size:0.75rem; margin-left: 2px;">🔒</span>`;
       }
+    }
+  });
+}
+
+function syncNavbarProfileButton() {
+  const ctaContainer = document.querySelector(".nav-cta");
+  if (ctaContainer) {
+    ctaContainer.innerHTML = state.user.registered
+      ? `<a href="registration.html" class="btn btn-secondary nav-main-btn">Dashboard</a>`
+      : `<a href="registration.html" class="btn btn-primary nav-main-btn">Register</a>`;
+  }
+
+  const heroActions = document.querySelector(".hero-actions");
+  const regBtn = heroActions ? heroActions.querySelector("a[href='registration.html']") : null;
+  if (regBtn) {
+    regBtn.innerText = state.user.registered ? "Dashboard" : "Start Here";
+  }
+}
+
+// Simplified generated UI overrides.
+function checkRouteGuards() {
+  const currentPath = window.location.pathname;
+  const fileName = currentPath.substring(currentPath.lastIndexOf("/") + 1) || "index.html";
+
+  if (state.user.registered) return;
+
+  if (fileName === "games.html") {
+    const targetSection = document.getElementById("games");
+    if (!targetSection) return;
+    targetSection.innerHTML = `
+      <div class="app-lock-container">
+        <div class="app-lock-card glass-card simple-card">
+          <div class="lock-icon-glow">LOCKED</div>
+          <h2>Register to Play</h2>
+          <p>Create your player profile first so your score can be saved.</p>
+          <div class="lock-benefits">
+            <div class="benefit-item">Save your score</div>
+            <div class="benefit-item">Support your country</div>
+            <div class="benefit-item">Join campaign rewards</div>
+          </div>
+          <a href="registration.html" class="btn btn-primary" style="width: 100%;">Register</a>
+        </div>
+      </div>
+    `;
+    targetSection.style.paddingTop = "80px";
+    targetSection.classList.remove("reveal-item");
+    targetSection.style.opacity = "1";
+    targetSection.style.transform = "none";
+  } else if (fileName === "photobooth.html") {
+    const targetSection = document.getElementById("booth");
+    if (!targetSection) return;
+    targetSection.innerHTML = `
+      <div class="app-lock-container">
+        <div class="app-lock-card glass-card simple-card">
+          <div class="lock-icon-glow">LOCKED</div>
+          <h2>Register to Use Photo Booth</h2>
+          <p>Create your player profile first so your poster can use your team details.</p>
+          <div class="lock-benefits">
+            <div class="benefit-item">Choose your team</div>
+            <div class="benefit-item">Create your poster</div>
+            <div class="benefit-item">Add it to the gallery</div>
+          </div>
+          <a href="registration.html" class="btn btn-primary" style="width: 100%;">Register</a>
+        </div>
+      </div>
+    `;
+    targetSection.style.paddingTop = "80px";
+    targetSection.classList.remove("reveal-item");
+    targetSection.style.opacity = "1";
+    targetSection.style.transform = "none";
+
+    const gallerySection = document.getElementById("gallery");
+    if (gallerySection) gallerySection.style.display = "none";
+  }
+}
+
+function injectMobileBottomNav() {
+  if (document.querySelector(".mobile-bottom-nav")) return;
+
+  const currentPath = window.location.pathname;
+  const fileName = currentPath.substring(currentPath.lastIndexOf("/") + 1) || "index.html";
+  const nav = document.createElement("div");
+  nav.className = "mobile-bottom-nav simple-mobile-nav";
+
+  const gamesLock = state.user.registered ? "" : `<span class="bottom-lock">Locked</span>`;
+  const boothLock = state.user.registered ? "" : `<span class="bottom-lock">Locked</span>`;
+
+  nav.innerHTML = `
+    <a href="index.html" class="bottom-nav-tab ${fileName === "index.html" ? "active" : ""}">
+      <span class="tab-label">${translate("Home")}</span>
+    </a>
+    <a href="registration.html" class="bottom-nav-tab ${fileName === "registration.html" ? "active" : ""}">
+      <span class="tab-label">${state.user.registered ? translate("Profile") : translate("Register")}</span>
+    </a>
+    <a href="games.html" class="bottom-nav-tab ${fileName === "games.html" ? "active" : ""}">
+      <span class="tab-label">${translate("Games")}${gamesLock}</span>
+    </a>
+    <a href="leaderboard.html" class="bottom-nav-tab ${fileName === "leaderboard.html" ? "active" : ""}">
+      <span class="tab-label">${translate("Standings")}</span>
+    </a>
+    <a href="photobooth.html" class="bottom-nav-tab ${fileName === "photobooth.html" ? "active" : ""}">
+      <span class="tab-label">${translate("Booth")}${boothLock}</span>
+    </a>
+  `;
+
+  document.body.appendChild(nav);
+}
+
+function updateDesktopNavLockBadges() {
+  if (state.user.registered) return;
+
+  document.querySelectorAll(".nav-links a").forEach(link => {
+    const href = link.getAttribute("href");
+    if (href === "games.html" && !link.innerHTML.includes("Locked")) {
+      link.innerHTML = `Games <span class="nav-lock">Locked</span>`;
+    } else if (href === "photobooth.html" && !link.innerHTML.includes("Locked")) {
+      link.innerHTML = `Photo Booth <span class="nav-lock">Locked</span>`;
     }
   });
 }

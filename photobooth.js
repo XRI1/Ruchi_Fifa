@@ -13,7 +13,7 @@ const boothBnText = {
   "Photo loaded. Choose a template and generate your poster.": "ছবি লোড হয়েছে। একটি টেমপ্লেট বাছাই করে পোস্টার তৈরি করুন।",
   "Please upload a photo or snap a picture first.": "প্রথমে একটি ছবি আপলোড করুন বা ছবি তুলুন।",
   "Poster generated. You can download it or add it to the gallery.": "পোস্টার তৈরি হয়েছে। আপনি এটি ডাউনলোড করতে বা গ্যালারিতে যোগ করতে পারেন।",
-  "Poster shared to the Social Fan Gallery.": "পোস্টার সোশ্যাল ফ্যান গ্যালারিতে শেয়ার হয়েছে।"
+  "Poster added to My Gallery.": "পোস্টার আমার গ্যালারিতে যোগ হয়েছে।"
 };
 
 function boothText(message) {
@@ -186,7 +186,6 @@ window.generateAIFanPhoto = function() {
   
   const bCanvas = document.getElementById("booth-canvas");
   const bCtx = bCanvas.getContext("2d");
-  const previewPlaceholder = document.getElementById("canvas-placeholder");
   
   bCtx.clearRect(0, 0, bCanvas.width, bCanvas.height);
   drawImageCover(bCtx, boothUserImage, bCanvas.width, bCanvas.height);
@@ -203,14 +202,30 @@ window.generateAIFanPhoto = function() {
   bCtx.fillRect(0, 0, bCanvas.width, bCanvas.height);
   drawThemeOverlay(bCtx, bCanvas.width, bCanvas.height, colors, country, flag);
   
-  // Show Canvas
-  previewPlaceholder.style.display = "none";
-  bCanvas.style.display = "block";
+  // Convert canvas to image and show in popup modal
+  const dataURL = bCanvas.toDataURL("image/png");
+  const modalImg = document.getElementById("poster-modal-img");
+  const modalOverlay = document.getElementById("poster-modal-overlay");
   
-  // Enable buttons
-  document.getElementById("booth-download-btn").classList.remove("btn-disabled");
-  document.getElementById("booth-share-btn").classList.remove("btn-disabled");
-  boothNotify("Poster generated. You can download it or add it to the gallery.", "success");
+  if (modalImg) modalImg.src = dataURL;
+  if (modalOverlay) {
+    modalOverlay.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+  
+  boothNotify("Poster generated!", "success");
+};
+
+// --- Close Poster Modal ---
+window.closePosterModal = function(e) {
+  // If called from overlay click, only close if clicking the overlay itself
+  if (e && e.target !== e.currentTarget) return;
+  
+  const modalOverlay = document.getElementById("poster-modal-overlay");
+  if (modalOverlay) {
+    modalOverlay.classList.remove("active");
+    document.body.style.overflow = "";
+  }
 };
 
 function drawThemeOverlay(bCtx, width, height, colors, country, flag) {
@@ -384,31 +399,30 @@ window.shareBoothPoster = function() {
   // Redraw gallery grid
   renderGalleryGrid();
   
-  boothNotify("Poster shared to the Social Fan Gallery.", "success");
+  boothNotify("Poster added to My Gallery.", "success");
   
-  // Reset buttons
-  document.getElementById("booth-share-btn").classList.add("btn-disabled");
+  // Close the popup modal
+  closePosterModal();
   
-  // Smooth scroll
+  // Smooth scroll to gallery
   document.getElementById("gallery").scrollIntoView({ behavior: 'smooth' });
 };
 
-// --- Redraw Gallery Grid ---
+// --- Redraw Gallery Grid (My Gallery – user's own posters only) ---
 function renderGalleryGrid() {
   const grid = document.getElementById("gallery-grid");
-  
-  // Keep the 3 hardcoded mock items, clear the dynamic ones
-  // In a clean way, let's rebuild the grid content
+  const emptyState = document.getElementById("gallery-empty-state");
+  if (!grid) return;
+
   let htmlContent = "";
-  
-  // Add dynamic items from state
-  state.galleryItems.forEach(item => {
+
+  // Only show user's own generated posters from state
+  state.galleryItems.forEach((item, index) => {
     const country = escapeHtml(item.country);
     const username = escapeHtml(item.username);
     const flag = escapeHtml(item.flag);
     const image = escapeHtml(item.image);
-    const userAvatar = escapeHtml(item.userAvatar);
-    const likes = Number.isFinite(Number(item.likes)) ? Number(item.likes) : 1;
+    const createdDate = item.id ? new Date(item.id).toLocaleDateString() : "";
     htmlContent += `
       <div class="gallery-item" data-country="${country}">
         <div class="gallery-img-wrap">
@@ -416,107 +430,31 @@ function renderGalleryGrid() {
         </div>
         <div class="gallery-meta">
           <div class="gallery-user-info">
-            <img src="${userAvatar}" alt="${username}" class="gallery-user-img">
+            <div class="gallery-poster-badge" style="background: var(--primary-neon); color: var(--text-dark); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0;">
+              ${index + 1}
+            </div>
             <div>
               <span class="gallery-username">${username}</span>
               <span class="gallery-user-flag">${flag}</span>
+              ${createdDate ? `<span style="display:block; font-size: 0.75rem; color: var(--text-gray);">${createdDate}</span>` : ""}
             </div>
           </div>
           <button class="gallery-like-btn liked" onclick="toggleLike(this)">
             <svg width="18" height="18" fill="red" stroke="red" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
             </svg>
-            <span class="like-count">${likes}</span>
+            <span class="like-count">${Number.isFinite(Number(item.likes)) ? Number(item.likes) : 1}</span>
           </button>
         </div>
       </div>
     `;
   });
-  
-  // Append hardcoded mock assets
-  htmlContent += `
-    <div class="gallery-item" data-country="Argentina">
-      <div class="gallery-img-wrap">
-        <img src="assets/images/stadium_hero.png" alt="Argentina Fan Poster">
-      </div>
-      <div class="gallery-meta">
-        <div class="gallery-user-info">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Sarah" class="gallery-user-img">
-          <div>
-            <span class="gallery-username">Sarah Miller</span>
-            <span class="gallery-user-flag">🇦🇷</span>
-          </div>
-        </div>
-        <button class="gallery-like-btn" onclick="toggleLike(this)">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-          </svg>
-          <span class="like-count">142</span>
-        </button>
-      </div>
-    </div>
-    
-    <div class="gallery-item" data-country="Brazil">
-      <div class="gallery-img-wrap">
-        <img src="assets/images/stadium_hero.png" alt="Brazil Fan Poster">
-      </div>
-      <div class="gallery-meta">
-        <div class="gallery-user-info">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Lucas" class="gallery-user-img">
-          <div>
-            <span class="gallery-username">Lucas Silva</span>
-            <span class="gallery-user-flag">🇧🇷</span>
-          </div>
-        </div>
-        <button class="gallery-like-btn" onclick="toggleLike(this)">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-          </svg>
-          <span class="like-count">89</span>
-        </button>
-      </div>
-    </div>
-    
-    <div class="gallery-item" data-country="Germany">
-      <div class="gallery-img-wrap">
-        <img src="assets/images/stadium_hero.png" alt="Germany Fan Poster">
-      </div>
-      <div class="gallery-meta">
-        <div class="gallery-user-info">
-          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="Marco" class="gallery-user-img">
-          <div>
-            <span class="gallery-username">Marco K.</span>
-            <span class="gallery-user-flag">🇩🇪</span>
-          </div>
-        </div>
-        <button class="gallery-like-btn" onclick="toggleLike(this)">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-          </svg>
-          <span class="like-count">204</span>
-        </button>
-      </div>
-    </div>
-  `;
-  
+
   grid.innerHTML = htmlContent;
-  
-  // Re-apply any filters currently active
-  const activeFilterBtn = document.querySelector(".filter-btn.active");
-  if (activeFilterBtn) {
-    // Get filter parameter from text or action
-    // Simpler: find which button it is and trigger click
-    const btnText = activeFilterBtn.innerText;
-    let country = "all";
-    if (btnText.includes("Argentina")) country = "Argentina";
-    else if (btnText.includes("Brazil")) country = "Brazil";
-    else if (btnText.includes("Germany")) country = "Germany";
-    else if (btnText.includes("France")) country = "France";
-    else if (btnText.includes("England")) country = "England";
-    else if (btnText.includes("Spain")) country = "Spain";
-    else if (btnText.includes("Japan")) country = "Japan";
-    else if (btnText.includes("USA")) country = "USA";
-    
-    filterGallery(country);
+
+  // Toggle empty state
+  if (emptyState) {
+    emptyState.style.display = state.galleryItems.length === 0 ? "block" : "none";
   }
 }
+

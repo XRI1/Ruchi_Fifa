@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <header class="site-topbar" aria-label="Site header">
     <a href="index.html" class="site-brand">
@@ -35,11 +37,9 @@
           <div class="booth-upload-grid">
             <div class="booth-opt-btn active" id="opt-upload" onclick="toggleBoothSource('upload')">
               <div class="booth-opt-icon">Upload</div>
-              <span>Upload</span>
             </div>
             <div class="booth-opt-btn" id="opt-webcam" onclick="toggleBoothSource('webcam')">
               <div class="booth-opt-icon">Camera</div>
-              <span>Camera</span>
             </div>
             <div class="webcam-stream-wrap" id="webcam-stream-wrap">
               <video id="webcam-video" autoplay playsinline muted></video>
@@ -82,42 +82,40 @@
           <button onclick="generateAIFanPhoto()" class="btn btn-accent" id="generate-booth-btn">Create Poster</button>
         </div>
       </div>
-
-      <div class="booth-preview-wrap reveal-item reveal-stagger-2">
-        <div class="glass-card booth-preview-card simple-card">
-          <div class="canvas-preview-frame" id="canvas-preview-frame">
-            <div class="canvas-placeholder-text" id="canvas-placeholder">
-              <p>Your poster preview will appear here.</p>
-            </div>
-            <canvas id="booth-canvas" width="640" height="800" style="display: none;"></canvas>
-          </div>
-          <div class="booth-preview-actions">
-            <button onclick="downloadBoothPoster()" class="btn btn-primary btn-disabled" id="booth-download-btn">Download</button>
-            <button onclick="shareBoothPoster()" class="btn btn-secondary btn-disabled" id="booth-share-btn">Add to Gallery</button>
-          </div>
-        </div>
-      </div>
     </div>
+    <canvas id="booth-canvas" width="640" height="800" style="display: none; position: absolute; pointer-events: none; opacity: 0;"></canvas>
   </section>
 
   <section id="gallery" class="gallery-section reveal-item simple-section">
     <div class="section-title">
-      <h2>Gallery</h2>
-      <p>Fan posters created during the campaign.</p>
-    </div>
-    <div class="gallery-filters reveal-item" id="gallery-filters">
-      <button class="filter-btn active" onclick="filterGallery('all')">All</button>
-      <button class="filter-btn" onclick="filterGallery('Argentina')">Argentina</button>
-      <button class="filter-btn" onclick="filterGallery('Brazil')">Brazil</button>
-      <button class="filter-btn" onclick="filterGallery('Germany')">Germany</button>
-      <button class="filter-btn" onclick="filterGallery('France')">France</button>
-      <button class="filter-btn" onclick="filterGallery('England')">England</button>
-      <button class="filter-btn" onclick="filterGallery('Spain')">Spain</button>
-      <button class="filter-btn" onclick="filterGallery('Japan')">Japan</button>
-      <button class="filter-btn" onclick="filterGallery('USA')">USA</button>
+      <h2>My Gallery</h2>
+      <p>Your personally created posters from the Photo Booth.</p>
     </div>
     <div class="gallery-grid reveal-item" id="gallery-grid"></div>
+    <div class="gallery-empty-state" id="gallery-empty-state" style="display: none;">
+      <div class="glass-card simple-card"
+        style="text-align: center; padding: 48px 24px; max-width: 480px; margin: 0 auto;">
+        <div style="font-size: 3rem; margin-bottom: 16px; opacity: 0.6;">📸</div>
+        <h3 style="margin-bottom: 8px; color: var(--text-white);">No Posters Yet</h3>
+        <p style="color: var(--text-gray); font-size: 0.95rem;">Create your first poster above and it will appear here
+          in your personal gallery.</p>
+      </div>
+    </div>
   </section>
+
+  <!-- Poster Generated Popup Modal -->
+  <div class="poster-modal-overlay" id="poster-modal-overlay" onclick="closePosterModal(event)">
+    <div class="poster-modal" onclick="event.stopPropagation()">
+      <button class="poster-modal-close" onclick="closePosterModal()" aria-label="Close">&times;</button>
+      <div class="poster-modal-img-wrap">
+        <img id="poster-modal-img" src="" alt="Your Generated Poster">
+      </div>
+      <div class="poster-modal-actions">
+        <button onclick="downloadBoothPoster()" class="btn btn-primary" id="booth-download-btn">Download</button>
+        <button onclick="shareBoothPoster()" class="btn btn-secondary" id="booth-share-btn">Save to My Gallery</button>
+      </div>
+    </div>
+  </div>
 
   <footer class="footer simple-footer">
     <div class="footer-bottom">
@@ -128,4 +126,5 @@
   <script src="app.js"></script>
   <script src="photobooth.js"></script>
 </body>
+
 </html>

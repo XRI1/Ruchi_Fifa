@@ -5320,3 +5320,43 @@ svg {
     padding: 5px 8px;
   }
 }
+
+/* Home page without top menu */
+.home-no-navbar .hero,
+.home-no-navbar .simple-hero {
+  padding-top: 64px;
+}
+
+@media (max-width: 768px) {
+  .home-no-navbar .hero,
+  .home-no-navbar .simple-hero {
+    padding-top: 34px;
+  }
+}
+
+/* Site-wide no top menu spacing */
+.subpage-header,
+.simple-subpage {
+  padding-top: 64px;
+  min-height: 240px;
+}
+
+#registration.dashboard-fullscreen {
+  padding-top: 40px !important;
+}
+
+body {
+  padding-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .subpage-header,
+  .simple-subpage {
+    padding-top: 34px;
+    min-height: 190px;
+  }
+
+  body {
+    padding-bottom: 0;
+  }
+}

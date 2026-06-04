@@ -675,7 +675,7 @@ function showRegistrationSuccess() {
   const regSection = document.getElementById("registration");
   if (regSection) {
     regSection.classList.add("dashboard-fullscreen");
-    regSection.style.paddingTop = "110px";
+    regSection.style.paddingTop = "40px";
   }
   
   document.getElementById("player-card-name").innerText = state.user.name;
@@ -1221,6 +1221,10 @@ function updateDesktopNavLockBadges() {
       }
     }
   });
+}
+
+function injectMobileBottomNav() {
+  document.querySelector(".mobile-bottom-nav")?.remove();
 }
 
 function syncNavbarProfileButton() {

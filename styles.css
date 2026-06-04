@@ -5220,3 +5220,103 @@ svg {
     min-height: 112px;
   }
 }
+
+/* ==========================================
+   VISUAL DASHBOARD CARDS
+   ========================================== */
+
+.dash-card {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.dash-card-visual {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.dash-card-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(8, 11, 18, 0.08), rgba(8, 11, 18, 0.82) 72%),
+    linear-gradient(135deg, rgba(255, 176, 46, 0.16), rgba(200, 25, 46, 0.12));
+}
+
+.dash-card-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 0.35s ease;
+}
+
+.dash-card:hover .dash-card-visual img {
+  transform: scale(1.07);
+}
+
+.dash-card-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin-top: auto;
+}
+
+.dash-card .dash-card-icon {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  margin: 0 0 8px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: rgba(11, 15, 22, 0.78);
+  color: #ffcf73;
+  font-size: 0.7rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+}
+
+.dash-card .dash-card-title {
+  color: #fff;
+  text-shadow: 0 8px 22px rgba(0, 0, 0, 0.58);
+}
+
+.card-leaderboard .dash-card-visual img {
+  object-position: center 42%;
+}
+
+.card-photobooth .dash-card-visual img {
+  object-position: center top;
+}
+
+.card-gallery .dash-card-visual img {
+  object-position: center;
+}
+
+#registration.dashboard-fullscreen .dash-card {
+  justify-content: flex-end;
+}
+
+#registration.dashboard-fullscreen .dash-card-icon {
+  margin-bottom: 10px;
+}
+
+#registration.dashboard-fullscreen .dash-card-content {
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .dash-card-visual::after {
+    background:
+      linear-gradient(180deg, rgba(8, 11, 18, 0.04), rgba(8, 11, 18, 0.84) 68%),
+      linear-gradient(135deg, rgba(255, 176, 46, 0.12), rgba(200, 25, 46, 0.1));
+  }
+
+  .dash-card .dash-card-icon {
+    font-size: 0.64rem;
+    padding: 5px 8px;
+  }
+}

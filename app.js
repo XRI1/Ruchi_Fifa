@@ -246,6 +246,22 @@ function initLanguageSupport() {
 }
 
 function injectLanguageToggle() {
+  const slot = document.querySelector(".site-language-slot");
+  if (slot && !slot.querySelector(".language-toggle")) {
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "language-toggle";
+    toggle.setAttribute("aria-label", "Switch language");
+    toggle.addEventListener("click", () => {
+      currentLanguage = currentLanguage === "bn" ? "en" : "bn";
+      localStorage.setItem(languageStorageKey, currentLanguage);
+      window.location.reload();
+    });
+    slot.appendChild(toggle);
+    syncLanguageToggle();
+    return;
+  }
+
   const navbar = document.getElementById("navbar");
   const cta = navbar ? navbar.querySelector(".nav-cta") : null;
   if (!navbar || !cta || navbar.querySelector(".language-toggle")) return;
@@ -1225,6 +1241,13 @@ function updateDesktopNavLockBadges() {
 
 function injectMobileBottomNav() {
   document.querySelector(".mobile-bottom-nav")?.remove();
+}
+
+function syncLanguageToggle() {
+  const toggle = document.querySelector(".language-toggle");
+  if (!toggle) return;
+  toggle.textContent = currentLanguage === "bn" ? "EN" : "BN";
+  toggle.setAttribute("aria-pressed", currentLanguage === "bn" ? "true" : "false");
 }
 
 function syncNavbarProfileButton() {

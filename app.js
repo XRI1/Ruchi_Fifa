@@ -612,6 +612,7 @@ window.editRegistrationDetails = function() {
   
   const regSection = document.getElementById("registration");
   if (regSection) {
+    regSection.classList.remove("dashboard-fullscreen");
     regSection.style.paddingTop = "50px";
   }
   
@@ -673,6 +674,7 @@ function showRegistrationSuccess() {
   
   const regSection = document.getElementById("registration");
   if (regSection) {
+    regSection.classList.add("dashboard-fullscreen");
     regSection.style.paddingTop = "110px";
   }
   
